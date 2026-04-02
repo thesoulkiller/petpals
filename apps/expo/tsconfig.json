@@ -1,0 +1,30 @@
+{
+  "extends": "../../tsconfig.base",
+  "include": [
+    "app/**/*.ts",
+    "app/**/*.tsx",
+    "features/**/*.ts",
+    "features/**/*.tsx",
+    "context/**/*.ts",
+    "context/**/*.tsx",
+    "types/**/*.ts",
+    "config/**/*.ts",
+    "ui/**/*.ts",
+    "ui/**/*.tsx",
+    "provider.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
+  ],
+  "compilerOptions": {
+    "composite": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "app/*": ["./*"],
+      "@my/ui": ["./ui"],
+      "@my/ui/*": ["./ui/*"],
+      "@my/config": ["./config"],
+      "@my/config/*": ["./config/*"]
+    }
+  }
+}

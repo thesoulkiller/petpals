@@ -1,0 +1,9 @@
+{
+  "id": "user_local",
+  "ownerName": "",
+  "pet": null,
+  "location": null,
+  "superlikes": 3,
+  "isPremium": false,
+  "onboardingComplete": false
+}

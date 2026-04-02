@@ -1,0 +1,345 @@
+[
+  {
+    "id": "profile_01",
+    "ownerName": "Emma",
+    "ownerAge": 28,
+    "pet": {
+      "id": "pet_01",
+      "name": "Biscuit",
+      "breed": "Golden Retriever",
+      "age": 2,
+      "description": "Biscuit is the happiest dog you'll ever meet. He loves fetch, mud puddles, and giving sloppy kisses to strangers.",
+      "photos": [
+        "https://picsum.photos/seed/biscuit1/400/500",
+        "https://picsum.photos/seed/biscuit2/400/500",
+        "https://picsum.photos/seed/biscuit3/400/500"
+      ],
+      "tags": [
+        { "id": "playful", "label": "Playful", "emoji": "🎾" },
+        { "id": "social", "label": "Social", "emoji": "🐾" },
+        { "id": "kid_friendly", "label": "Kid-friendly", "emoji": "👶" }
+      ],
+      "ownerId": "profile_01"
+    },
+    "location": { "lat": 37.7749, "lng": -122.4194, "city": "San Francisco, CA" }
+  },
+  {
+    "id": "profile_02",
+    "ownerName": "Marco",
+    "ownerAge": 32,
+    "pet": {
+      "id": "pet_02",
+      "name": "Luna",
+      "breed": "Siberian Husky",
+      "age": 3,
+      "description": "Luna howls at the moon and sprints through parks like a wolf. Loves the cold and snuggling after runs.",
+      "photos": [
+        "https://picsum.photos/seed/luna1/400/500",
+        "https://picsum.photos/seed/luna2/400/500"
+      ],
+      "tags": [
+        { "id": "active", "label": "Active", "emoji": "🏃" },
+        { "id": "outdoor", "label": "Outdoor lover", "emoji": "🌿" }
+      ],
+      "ownerId": "profile_02"
+    },
+    "location": { "lat": 37.3382, "lng": -121.8863, "city": "San Jose, CA" }
+  },
+  {
+    "id": "profile_03",
+    "ownerName": "Sofia",
+    "ownerAge": 25,
+    "pet": {
+      "id": "pet_03",
+      "name": "Mochi",
+      "breed": "Shiba Inu",
+      "age": 1,
+      "description": "Mochi does the doge face in real life. Very fluffy, very stubborn, very adorable. He judges everyone.",
+      "photos": [
+        "https://picsum.photos/seed/mochi1/400/500",
+        "https://picsum.photos/seed/mochi2/400/500",
+        "https://picsum.photos/seed/mochi3/400/500"
+      ],
+      "tags": [
+        { "id": "calm", "label": "Calm", "emoji": "😌" },
+        { "id": "indoor", "label": "Indoor cat", "emoji": "🏠" }
+      ],
+      "ownerId": "profile_03"
+    },
+    "location": { "lat": 37.8044, "lng": -122.2712, "city": "Oakland, CA" }
+  },
+  {
+    "id": "profile_04",
+    "ownerName": "James",
+    "ownerAge": 30,
+    "pet": {
+      "id": "pet_04",
+      "name": "Cheddar",
+      "breed": "Corgi",
+      "age": 4,
+      "description": "Cheddar is a professional zoomies athlete. Short legs, big personality, infinite energy. Will herd your children.",
+      "photos": [
+        "https://picsum.photos/seed/cheddar1/400/500",
+        "https://picsum.photos/seed/cheddar2/400/500"
+      ],
+      "tags": [
+        { "id": "playful", "label": "Playful", "emoji": "🎾" },
+        { "id": "trained", "label": "Well trained", "emoji": "🎓" },
+        { "id": "dog_friendly", "label": "Dog-friendly", "emoji": "🐶" }
+      ],
+      "ownerId": "profile_04"
+    },
+    "location": { "lat": 37.6879, "lng": -122.4702, "city": "Daly City, CA" }
+  },
+  {
+    "id": "profile_05",
+    "ownerName": "Aisha",
+    "ownerAge": 27,
+    "pet": {
+      "id": "pet_05",
+      "name": "Pepper",
+      "breed": "Tabby Cat",
+      "age": 2,
+      "description": "Pepper knocks things off shelves, judges you from a distance, then curls up on your laptop at 3am.",
+      "photos": [
+        "https://picsum.photos/seed/pepper1/400/500",
+        "https://picsum.photos/seed/pepper2/400/500"
+      ],
+      "tags": [
+        { "id": "cuddly", "label": "Cuddly", "emoji": "🤗" },
+        { "id": "indoor", "label": "Indoor cat", "emoji": "🏠" }
+      ],
+      "ownerId": "profile_05"
+    },
+    "location": { "lat": 37.4419, "lng": -122.143, "city": "Palo Alto, CA" }
+  },
+  {
+    "id": "profile_06",
+    "ownerName": "Luca",
+    "ownerAge": 35,
+    "pet": {
+      "id": "pet_06",
+      "name": "Bruno",
+      "breed": "French Bulldog",
+      "age": 3,
+      "description": "Bruno snores louder than your alarm clock. He expects a gourmet breakfast, cuddles, and world domination.",
+      "photos": [
+        "https://picsum.photos/seed/bruno1/400/500",
+        "https://picsum.photos/seed/bruno2/400/500",
+        "https://picsum.photos/seed/bruno3/400/500"
+      ],
+      "tags": [
+        { "id": "cuddly", "label": "Cuddly", "emoji": "🤗" },
+        { "id": "calm", "label": "Calm", "emoji": "😌" },
+        { "id": "kid_friendly", "label": "Kid-friendly", "emoji": "👶" }
+      ],
+      "ownerId": "profile_06"
+    },
+    "location": { "lat": 37.5485, "lng": -121.9886, "city": "Fremont, CA" }
+  },
+  {
+    "id": "profile_07",
+    "ownerName": "Yuki",
+    "ownerAge": 29,
+    "pet": {
+      "id": "pet_07",
+      "name": "Sakura",
+      "breed": "Ragdoll Cat",
+      "age": 5,
+      "description": "Sakura goes limp when you hold her — she's a professional cuddle machine. Loves window watching and chin scratches.",
+      "photos": [
+        "https://picsum.photos/seed/sakura1/400/500",
+        "https://picsum.photos/seed/sakura2/400/500"
+      ],
+      "tags": [
+        { "id": "cuddly", "label": "Cuddly", "emoji": "🤗" },
+        { "id": "calm", "label": "Calm", "emoji": "😌" }
+      ],
+      "ownerId": "profile_07"
+    },
+    "location": { "lat": 37.5630, "lng": -122.0530, "city": "Union City, CA" }
+  },
+  {
+    "id": "profile_08",
+    "ownerName": "Diego",
+    "ownerAge": 26,
+    "pet": {
+      "id": "pet_08",
+      "name": "Nacho",
+      "breed": "Chihuahua",
+      "age": 6,
+      "description": "Nacho is 6 lbs of pure confidence. He has never been told he is small. Excellent guard dog for a studio apartment.",
+      "photos": [
+        "https://picsum.photos/seed/nacho1/400/500",
+        "https://picsum.photos/seed/nacho2/400/500",
+        "https://picsum.photos/seed/nacho3/400/500"
+      ],
+      "tags": [
+        { "id": "social", "label": "Social", "emoji": "🐾" },
+        { "id": "indoor", "label": "Indoor cat", "emoji": "🏠" }
+      ],
+      "ownerId": "profile_08"
+    },
+    "location": { "lat": 37.7751, "lng": -122.4193, "city": "San Francisco, CA" }
+  },
+  {
+    "id": "profile_09",
+    "ownerName": "Zoe",
+    "ownerAge": 31,
+    "pet": {
+      "id": "pet_09",
+      "name": "Archie",
+      "breed": "Border Collie",
+      "age": 2,
+      "description": "Archie could solve a Rubik's cube if he had thumbs. Learns tricks in minutes, needs two walks per day minimum.",
+      "photos": [
+        "https://picsum.photos/seed/archie1/400/500",
+        "https://picsum.photos/seed/archie2/400/500"
+      ],
+      "tags": [
+        { "id": "active", "label": "Active", "emoji": "🏃" },
+        { "id": "trained", "label": "Well trained", "emoji": "🎓" },
+        { "id": "outdoor", "label": "Outdoor lover", "emoji": "🌿" }
+      ],
+      "ownerId": "profile_09"
+    },
+    "location": { "lat": 37.4630, "lng": -122.0267, "city": "Sunnyvale, CA" }
+  },
+  {
+    "id": "profile_10",
+    "ownerName": "Priya",
+    "ownerAge": 28,
+    "pet": {
+      "id": "pet_10",
+      "name": "Mango",
+      "breed": "Bengal Cat",
+      "age": 3,
+      "description": "Mango has the spots of a leopard and the confidence to match. Loves to sprint at 3am and chat back.",
+      "photos": [
+        "https://picsum.photos/seed/mango1/400/500",
+        "https://picsum.photos/seed/mango2/400/500"
+      ],
+      "tags": [
+        { "id": "playful", "label": "Playful", "emoji": "🎾" },
+        { "id": "social", "label": "Social", "emoji": "🐾" }
+      ],
+      "ownerId": "profile_10"
+    },
+    "location": { "lat": 37.3688, "lng": -122.0363, "city": "Santa Clara, CA" }
+  },
+  {
+    "id": "profile_11",
+    "ownerName": "Finn",
+    "ownerAge": 33,
+    "pet": {
+      "id": "pet_11",
+      "name": "Waffle",
+      "breed": "Labrador Retriever",
+      "age": 1,
+      "description": "Waffle is a puppy in a Lab suit. Still learning the concept of personal space. Will steal your socks.",
+      "photos": [
+        "https://picsum.photos/seed/waffle1/400/500",
+        "https://picsum.photos/seed/waffle2/400/500",
+        "https://picsum.photos/seed/waffle3/400/500"
+      ],
+      "tags": [
+        { "id": "playful", "label": "Playful", "emoji": "🎾" },
+        { "id": "social", "label": "Social", "emoji": "🐾" },
+        { "id": "dog_friendly", "label": "Dog-friendly", "emoji": "🐶" }
+      ],
+      "ownerId": "profile_11"
+    },
+    "location": { "lat": 37.6588, "lng": -122.4090, "city": "South San Francisco, CA" }
+  },
+  {
+    "id": "profile_12",
+    "ownerName": "Nadia",
+    "ownerAge": 24,
+    "pet": {
+      "id": "pet_12",
+      "name": "Oreo",
+      "breed": "Boston Terrier",
+      "age": 4,
+      "description": "Oreo is black and white and cute all over. She communicates exclusively through eyebrows and wiggle dances.",
+      "photos": [
+        "https://picsum.photos/seed/oreo1/400/500",
+        "https://picsum.photos/seed/oreo2/400/500"
+      ],
+      "tags": [
+        { "id": "cuddly", "label": "Cuddly", "emoji": "🤗" },
+        { "id": "kid_friendly", "label": "Kid-friendly", "emoji": "👶" }
+      ],
+      "ownerId": "profile_12"
+    },
+    "location": { "lat": 37.5485, "lng": -122.1858, "city": "Hayward, CA" }
+  },
+  {
+    "id": "profile_13",
+    "ownerName": "Hiroshi",
+    "ownerAge": 36,
+    "pet": {
+      "id": "pet_13",
+      "name": "Kuma",
+      "breed": "Akita",
+      "age": 5,
+      "description": "Kuma is regal, calm, and fiercely loyal. He meditates in the garden daily and tolerates no nonsense.",
+      "photos": [
+        "https://picsum.photos/seed/kuma1/400/500",
+        "https://picsum.photos/seed/kuma2/400/500"
+      ],
+      "tags": [
+        { "id": "calm", "label": "Calm", "emoji": "😌" },
+        { "id": "trained", "label": "Well trained", "emoji": "🎓" }
+      ],
+      "ownerId": "profile_13"
+    },
+    "location": { "lat": 37.8716, "lng": -122.2727, "city": "Berkeley, CA" }
+  },
+  {
+    "id": "profile_14",
+    "ownerName": "Chloe",
+    "ownerAge": 27,
+    "pet": {
+      "id": "pet_14",
+      "name": "Pudding",
+      "breed": "Persian Cat",
+      "age": 7,
+      "description": "Pudding is the fluffiest cat in existence. She requires grooming twice a week and complains like a duchess.",
+      "photos": [
+        "https://picsum.photos/seed/pudding1/400/500",
+        "https://picsum.photos/seed/pudding2/400/500",
+        "https://picsum.photos/seed/pudding3/400/500"
+      ],
+      "tags": [
+        { "id": "cuddly", "label": "Cuddly", "emoji": "🤗" },
+        { "id": "indoor", "label": "Indoor cat", "emoji": "🏠" },
+        { "id": "calm", "label": "Calm", "emoji": "😌" }
+      ],
+      "ownerId": "profile_14"
+    },
+    "location": { "lat": 37.9935, "lng": -122.1172, "city": "Walnut Creek, CA" }
+  },
+  {
+    "id": "profile_15",
+    "ownerName": "Rafa",
+    "ownerAge": 29,
+    "pet": {
+      "id": "pet_15",
+      "name": "Churro",
+      "breed": "Pomeranian",
+      "age": 2,
+      "description": "Churro is a golden fluffball that thinks he is a German Shepherd. Tiny, loud, and absolutely loves everyone.",
+      "photos": [
+        "https://picsum.photos/seed/churro1/400/500",
+        "https://picsum.photos/seed/churro2/400/500"
+      ],
+      "tags": [
+        { "id": "playful", "label": "Playful", "emoji": "🎾" },
+        { "id": "social", "label": "Social", "emoji": "🐾" },
+        { "id": "dog_friendly", "label": "Dog-friendly", "emoji": "🐶" }
+      ],
+      "ownerId": "profile_15"
+    },
+    "location": { "lat": 37.6879, "lng": -122.4702, "city": "Daly City, CA" }
+  }
+]

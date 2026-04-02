@@ -1,0 +1,29 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "Expo Dev Server (iOS Simulator)",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["/Users/kintaro/projects/aidev/petpals/.claude/start-expo-ios.sh"],
+      "port": 8082
+    },
+    {
+      "name": "Expo Dev Server (Android Emulator)",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "export PATH='/opt/homebrew/bin:/usr/local/bin:$PATH' && cd /Users/kintaro/projects/aidev/petpals/apps/expo && /opt/homebrew/bin/node /opt/homebrew/bin/npx expo start --android --port 8082"],
+      "port": 8082
+    },
+    {
+      "name": "Expo Dev Server (Expo Go / QR)",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "export PATH='/opt/homebrew/bin:/usr/local/bin:$PATH' && cd /Users/kintaro/projects/aidev/petpals/apps/expo && /opt/homebrew/bin/node /opt/homebrew/bin/npx expo start --port 8082"],
+      "port": 8082
+    },
+    {
+      "name": "Expo Dev Server (tunnel)",
+      "runtimeExecutable": "/bin/sh",
+      "runtimeArgs": ["-c", "export PATH='/opt/homebrew/bin:/usr/local/bin:$PATH' && cd /Users/kintaro/projects/aidev/petpals/apps/expo && /opt/homebrew/bin/node /opt/homebrew/bin/npx expo start --tunnel --port 8082"],
+      "port": 8082
+    }
+  ]
+}

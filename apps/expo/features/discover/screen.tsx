@@ -19,7 +19,7 @@ export function DiscoverScreen() {
     if (pendingMatch) {
       router.push('/match')
     }
-  }, [pendingMatch])
+  }, [pendingMatch, router])
 
   function handleSwipe(profileId: string, direction: SwipeDirection) {
     swipe(profileId, direction)

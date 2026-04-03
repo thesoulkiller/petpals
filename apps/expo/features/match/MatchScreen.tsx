@@ -87,9 +87,9 @@ export function MatchScreen() {
   }
 
   function handleSendWoof() {
+    if (!targetProfile) return
     clearMatch()
-    router.back()
-    // Stub — real: open chat screen
+    router.push(`/chat/${targetProfile.id}`)
   }
 
   const targetProfile = pendingMatch?.targetProfile

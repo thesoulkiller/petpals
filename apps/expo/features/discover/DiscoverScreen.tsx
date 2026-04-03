@@ -22,6 +22,14 @@ export function DiscoverScreen() {
   }, [pendingMatch, router])
 
   function handleSwipe(profileId: string, direction: SwipeDirection) {
+    if (direction === 'right' && !user.isPremium && user.dailyLikesRemaining <= 0) {
+      router.push('/paywall/subscription')
+      return
+    }
+    if (direction === 'up' && !user.isPremium && user.superlikes <= 0) {
+      router.push('/paywall/superlikes')
+      return
+    }
     swipe(profileId, direction)
   }
 
@@ -30,7 +38,16 @@ export function DiscoverScreen() {
   }
 
   function handleLike() {
-    if (remainingProfiles[0]) swipe(remainingProfiles[0].id, 'right')
+    if (!remainingProfiles[0]) return
+    if (!user.isPremium && user.dailyLikesRemaining <= 0) {
+      router.push('/paywall/subscription')
+      return
+    }
+    swipe(remainingProfiles[0].id, 'right')
+  }
+
+  function handleOpenDetail(profileId: string) {
+    router.push(`/discover/${profileId}`)
   }
 
   function handleSuperlike() {
@@ -49,12 +66,32 @@ export function DiscoverScreen() {
         <View style={styles.header}>
           <Text style={styles.logo}>🐾 PetPals</Text>
 
-          {/* Superlike badge */}
-          <View style={[styles.superlikeBadge, user.superlikes <= 0 && styles.superlikeBadgeEmpty]}>
-            <Text style={styles.superlikeEmoji}>⭐</Text>
-            <Text style={[styles.superlikeCount, user.superlikes <= 0 && styles.superlikeCountEmpty]}>
-              {user.superlikes}
-            </Text>
+          <View style={styles.headerBadges}>
+            {/* Daily likes badge */}
+            {!user.isPremium && (
+              <TouchableOpacity
+                style={[styles.badge, user.dailyLikesRemaining <= 0 && styles.badgeEmpty]}
+                onPress={() => user.dailyLikesRemaining <= 0 && router.push('/paywall/subscription')}
+                activeOpacity={0.85}
+              >
+                <Text style={styles.badgeEmoji}>❤️</Text>
+                <Text style={[styles.badgeCount, user.dailyLikesRemaining <= 0 && styles.badgeCountEmpty]}>
+                  {user.dailyLikesRemaining <= 0 ? '0' : user.dailyLikesRemaining}
+                </Text>
+              </TouchableOpacity>
+            )}
+
+            {/* Superlike badge */}
+            <TouchableOpacity
+              style={[styles.badge, styles.badgeSuper, user.superlikes <= 0 && styles.badgeEmpty]}
+              onPress={() => user.superlikes <= 0 && router.push('/paywall/superlikes')}
+              activeOpacity={0.85}
+            >
+              <Text style={styles.badgeEmoji}>⭐</Text>
+              <Text style={[styles.badgeCount, user.superlikes <= 0 && styles.badgeCountEmpty]}>
+                {user.superlikes}
+              </Text>
+            </TouchableOpacity>
           </View>
         </View>
 
@@ -76,6 +113,7 @@ export function DiscoverScreen() {
           <SwipeDeck
             profiles={remainingProfiles}
             onSwipe={handleSwipe}
+            onOpenDetail={handleOpenDetail}
             onRefresh={() => {}}
           />
         </View>
@@ -144,27 +182,35 @@ const styles = StyleSheet.create({
     fontFamily: DS.font.display,
     letterSpacing: -0.3,
   },
-  superlikeBadge: {
+  headerBadges: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DS.space.sm,
+  },
+  badge: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-    backgroundColor: DS.superlike,
+    backgroundColor: DS.primary,
     borderRadius: DS.radius.pill,
     paddingHorizontal: DS.space.md,
     paddingVertical: DS.space.xs,
   },
-  superlikeBadgeEmpty: {
+  badgeSuper: {
+    backgroundColor: DS.superlike,
+  },
+  badgeEmpty: {
     backgroundColor: DS.cardBorder,
   },
-  superlikeEmoji: {
+  badgeEmoji: {
     fontSize: 13,
   },
-  superlikeCount: {
+  badgeCount: {
     ...DS.textCaption,
     color: DS.white,
     fontWeight: '700',
   },
-  superlikeCountEmpty: {
+  badgeCountEmpty: {
     color: DS.muted,
   },
   premiumBanner: {

@@ -1,9 +1,8 @@
 /**
  * PetPals Design System — Direction C: Bold Gradient
  *
- * Fonts: Add Clash Grotesk (.otf) and DM Sans (.ttf) to assets/fonts/
- * then load with expo-font in _layout.tsx. Until then, falls back to
- * system font. All other tokens are production-ready.
+ * Fonts: Clash Grotesk Bold + DM Sans (Regular, Medium) — loaded in _layout.tsx.
+ * Files: apps/expo/assets/fonts/
  *
  * See DESIGN.md for rationale and decisions log.
  */
@@ -39,12 +38,11 @@ export const DS = {
   white: '#FFFFFF',
 
   // ─── Typography ──────────────────────────────────────────────────────────
-  // Replace 'System' with 'ClashGrotesk-Bold' / 'DMSans-Regular' once fonts
-  // are added to assets/fonts/ and loaded in _layout.tsx.
+  // Fonts loaded in _layout.tsx via useFonts. Files in assets/fonts/.
   font: {
-    display: 'System',   // → ClashGrotesk-Bold
-    body: 'System',      // → DMSans-Regular
-    medium: 'System',    // → DMSans-Medium
+    display: 'ClashGrotesk-Bold',
+    body: 'DMSans-Regular',
+    medium: 'DMSans-Medium',
   },
 
   // Scale

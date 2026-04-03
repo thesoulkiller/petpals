@@ -1,43 +1,32 @@
 
-
 import React, { useState } from 'react'
 import { StyleSheet, FlatList, Image, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Text } from 'tamagui'
-import { Lock } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
 import { DS } from '../../theme'
 import { useAppContext } from '../../context/AppContext'
 import type { PetProfile } from '../../types/petpals'
 
+const LIKED_PANEL_LIMIT = 5
+
 function ProfileCard({
   profile,
   isMatch,
-  isPremium,
   onPress,
 }: {
   profile: PetProfile
   isMatch: boolean
-  isPremium: boolean
   onPress: () => void
 }) {
-  const blurred = isMatch && !isPremium
-
   return (
     <TouchableOpacity onPress={onPress} style={styles.card} activeOpacity={0.88}>
       <View style={styles.cardPhotoWrap}>
         <Image
           source={{ uri: profile.pet.photos[0] }}
-          style={[styles.cardPhoto, blurred && styles.blurredPhoto]}
+          style={styles.cardPhoto}
           resizeMode="cover"
-          blurRadius={blurred ? 15 : 0}
         />
-        {blurred && (
-          <View style={styles.lockOverlay}>
-            <Lock color={DS.white} size={20} />
-            <Text style={styles.lockLabel}>Premium</Text>
-          </View>
-        )}
         {isMatch && (
           <View style={styles.matchBadge}>
             <Text style={styles.matchBadgeText}>MATCH 💕</Text>
@@ -46,10 +35,10 @@ function ProfileCard({
       </View>
       <View style={styles.cardInfo}>
         <Text style={styles.cardName} numberOfLines={1}>
-          {blurred ? '???' : profile.pet.name}
+          {profile.ownerName}
         </Text>
         <Text style={styles.cardCity} numberOfLines={1}>
-          {profile.location.city}
+          {profile.pet.name} · {profile.location.city}
         </Text>
       </View>
     </TouchableOpacity>
@@ -58,12 +47,19 @@ function ProfileCard({
 
 export function LikesScreen() {
   const router = useRouter()
-  const { likes, profiles, user } = useAppContext()
+  const { likes, profiles } = useAppContext()
   const [activeTab, setActiveTab] = useState<'matches' | 'likes'>('matches')
 
-  const likeRecords = likes.filter((l) => l.type !== 'dislike')
-  const matchRecords = likes.filter((l) => l.isMatch)
-  const displayRecords = activeTab === 'matches' ? matchRecords : likeRecords
+  const likeRecords = likes
+    .filter((l) => l.type !== 'dislike')
+    .sort((a, b) => b.timestamp - a.timestamp)
+  const matchRecords = likeRecords.filter((l) => l.isMatch)
+
+  // Last 5 liked (non-match likes shown in liked tab)
+  const recentLikeRecords = likeRecords.slice(0, LIKED_PANEL_LIMIT)
+
+  const displayRecords = activeTab === 'matches' ? matchRecords : recentLikeRecords
+
   const displayProfiles: PetProfile[] = displayRecords
     .map((r) => profiles.find((p) => p.id === r.targetProfileId))
     .filter((p): p is PetProfile => p !== undefined)
@@ -102,24 +98,11 @@ export function LikesScreen() {
               <Text style={[styles.tabLabel, activeTab === tab && styles.tabLabelActive]}>
                 {tab === 'matches'
                   ? `Matches (${matchRecords.length})`
-                  : `Liked (${likeRecords.length})`}
+                  : `Liked (${recentLikeRecords.length})`}
               </Text>
             </TouchableOpacity>
           ))}
         </View>
-
-        {/* Premium upsell */}
-        {activeTab === 'matches' && !user.isPremium && matchRecords.length > 0 && (
-          <TouchableOpacity
-            style={styles.premiumBanner}
-            onPress={() => router.push('/paywall/subscription')}
-            activeOpacity={0.88}
-          >
-            <Text style={styles.premiumBannerText}>
-              💎 Unlock all matches with Premium
-            </Text>
-          </TouchableOpacity>
-        )}
 
         <FlatList
           data={displayProfiles}
@@ -129,12 +112,16 @@ export function LikesScreen() {
           columnWrapperStyle={styles.row}
           renderItem={({ item }) => {
             const record = displayRecords.find((r) => r.targetProfileId === item.id)
+            const isMatch = record?.isMatch ?? false
             return (
               <ProfileCard
                 profile={item}
-                isMatch={record?.isMatch ?? false}
-                isPremium={user.isPremium}
-                onPress={() => {}}
+                isMatch={isMatch}
+                onPress={() => {
+                  if (isMatch) {
+                    router.push(`/chat/${item.id}`)
+                  }
+                }}
               />
             )
           }}
@@ -194,21 +181,6 @@ const styles = StyleSheet.create({
   tabLabelActive: {
     color: DS.primary,
   },
-  premiumBanner: {
-    marginHorizontal: DS.space.base,
-    marginBottom: DS.space.md,
-    backgroundColor: 'rgba(255,107,157,0.10)',
-    borderRadius: DS.radius.md,
-    borderWidth: 1,
-    borderColor: DS.cardBorder,
-    paddingVertical: DS.space.md,
-    alignItems: 'center',
-  },
-  premiumBannerText: {
-    ...DS.textCaption,
-    fontWeight: '700',
-    color: DS.primary,
-  },
   grid: {
     paddingHorizontal: DS.space.base,
     paddingBottom: DS.space.xl,
@@ -232,25 +204,6 @@ const styles = StyleSheet.create({
   cardPhoto: {
     width: '100%',
     aspectRatio: 0.85,
-  },
-  blurredPhoto: {
-    opacity: 0.6,
-  },
-  lockOverlay: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: DS.space.xs,
-  },
-  lockLabel: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: DS.white,
-    textAlign: 'center',
   },
   matchBadge: {
     position: 'absolute',

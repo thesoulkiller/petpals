@@ -35,7 +35,8 @@ export interface UserState {
   ownerName: string
   pet: Pet | null
   location: { lat: number; lng: number } | null
-  superlikes: number // starts at 3 (free tier)
+  superlikes: number       // starts at 3 (free tier); unlimited for premium
+  dailyLikesRemaining: number // 20/day for free; unlimited for premium
   isPremium: boolean
   onboardingComplete: boolean
 }

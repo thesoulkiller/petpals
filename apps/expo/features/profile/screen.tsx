@@ -1,18 +1,13 @@
 'use client'
 
 import React, { useState } from 'react'
-import {
-  StyleSheet,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  Alert } from 'react-native'
-import { Button, Text, XStack, YStack } from 'tamagui'
-import { TextInput } from 'react-native'
+import { StyleSheet, Image, ScrollView, TouchableOpacity, Alert, View, TextInput } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { Text } from 'tamagui'
+import { LinearGradient } from 'expo-linear-gradient'
 import { Edit3, Star, Crown, Heart } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
-import { bubblegumColors } from '@my/config'
+import { DS } from '../../theme'
 import { useAppContext } from '../../context/AppContext'
 
 export function ProfileScreen() {
@@ -39,70 +34,64 @@ export function ProfileScreen() {
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        {/* Header */}
-        <YStack paddingHorizontal="$4" paddingTop="$3" paddingBottom="$2">
-          <Text fontSize={24} fontWeight="900" color={bubblegumColors.text}>
-            My Profile 🐾
-          </Text>
-        </YStack>
+        {/* Gradient header strip with avatar */}
+        <LinearGradient
+          colors={DS.gradient}
+          start={{ x: 0.1, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={styles.gradientHeader}
+        >
+          <Text style={styles.headerWatermark}>🐾</Text>
 
-        {/* Pet photo */}
-        <YStack alignItems="center" paddingTop="$2" paddingBottom="$4">
           {hasPet && user.pet!.photos.length > 0 ? (
             <Image
               source={{ uri: user.pet!.photos[0] }}
-              style={styles.profilePhoto}
+              style={styles.avatar}
               resizeMode="cover"
             />
           ) : (
-            <YStack
-              width={140}
-              height={140}
-              borderRadius={70}
-              backgroundColor={bubblegumColors.backgroundMuted}
-              alignItems="center"
-              justifyContent="center"
-              borderWidth={3}
-              borderColor={bubblegumColors.primaryLight}
-            >
-              <Text fontSize={48}>🐾</Text>
-            </YStack>
+            <View style={[styles.avatar, styles.avatarEmpty]}>
+              <Text style={{ fontSize: 40 }}>🐾</Text>
+            </View>
           )}
 
-          {/* Premium badge */}
+          <Text style={styles.headerName}>
+            {user.ownerName || 'Your Name'}
+          </Text>
           {user.isPremium && (
-            <XStack
-              backgroundColor={bubblegumColors.warning}
-              borderRadius={20}
-              paddingHorizontal="$3"
-              paddingVertical="$1"
-              marginTop="$2"
-              alignItems="center"
-              gap="$1"
-            >
-              <Crown color="white" size={14} />
-              <Text color="white" fontSize={12} fontWeight="800">Premium</Text>
-            </XStack>
+            <View style={styles.premiumBadge}>
+              <Crown color={DS.superlike} size={14} />
+              <Text style={styles.premiumBadgeText}>Premium</Text>
+            </View>
           )}
-        </YStack>
+        </LinearGradient>
 
-        {/* Name row */}
-        <YStack paddingHorizontal="$4" gap="$3">
-          <YStack
-            backgroundColor={bubblegumColors.backgroundCard}
-            borderRadius={16}
-            padding="$4"
-            gap="$2"
-            shadowColor={bubblegumColors.text}
-            shadowOffset={{ width: 0, height: 2 }}
-            shadowOpacity={0.05}
-            shadowRadius={8}
-          >
-            <Text fontSize={12} fontWeight="700" color={bubblegumColors.textMuted} textTransform="uppercase" letterSpacing={1}>
-              Your Name
-            </Text>
+        {/* Content */}
+        <View style={styles.content}>
+          {/* Stats row */}
+          <View style={styles.statsRow}>
+            <View style={styles.statCard}>
+              <Heart color={DS.primary} size={20} />
+              <Text style={styles.statNumber}>{likesSent}</Text>
+              <Text style={styles.statLabel}>Likes sent</Text>
+            </View>
+            <View style={styles.statCard}>
+              <Text style={{ fontSize: 20 }}>💕</Text>
+              <Text style={styles.statNumber}>{matchCount}</Text>
+              <Text style={styles.statLabel}>Matches</Text>
+            </View>
+            <View style={styles.statCard}>
+              <Star color={DS.superlike} size={20} />
+              <Text style={styles.statNumber}>{user.superlikes}</Text>
+              <Text style={styles.statLabel}>Superlikes</Text>
+            </View>
+          </View>
+
+          {/* Name card */}
+          <View style={styles.card}>
+            <Text style={styles.cardLabel}>Your Name</Text>
             {editingName ? (
-              <XStack gap="$2" alignItems="center" flex={1}>
+              <View style={styles.editRow}>
                 <TextInput
                   value={nameInput}
                   onChangeText={setNameInput}
@@ -110,153 +99,74 @@ export function ProfileScreen() {
                   style={styles.nameInput}
                   onSubmitEditing={saveOwnerName}
                   returnKeyType="done"
+                  placeholderTextColor={DS.muted}
                 />
-                <Button
-                  onPress={saveOwnerName}
-                  backgroundColor={bubblegumColors.primary}
-                  borderRadius={12}
-                  paddingHorizontal="$3"
-                  height={44}
-                >
-                  <Text color="white" fontWeight="700">Save</Text>
-                </Button>
-              </XStack>
+                <TouchableOpacity style={styles.saveBtn} onPress={saveOwnerName} activeOpacity={0.85}>
+                  <Text style={styles.saveBtnText}>Save</Text>
+                </TouchableOpacity>
+              </View>
             ) : (
-              <XStack alignItems="center" justifyContent="space-between">
-                <Text fontSize={18} fontWeight="700" color={bubblegumColors.text}>
+              <View style={styles.nameRow}>
+                <Text style={styles.nameValue}>
                   {user.ownerName || 'Set your name'}
                 </Text>
-                <TouchableOpacity onPress={() => setEditingName(true)}>
-                  <Edit3 color={bubblegumColors.primary} size={18} />
+                <TouchableOpacity onPress={() => setEditingName(true)} activeOpacity={0.7}>
+                  <Edit3 color={DS.primary} size={18} />
                 </TouchableOpacity>
-              </XStack>
+              </View>
             )}
-          </YStack>
+          </View>
 
-          {/* Pet info */}
+          {/* Pet info card */}
           {hasPet && (
-            <YStack
-              backgroundColor={bubblegumColors.backgroundCard}
-              borderRadius={16}
-              padding="$4"
-              gap="$3"
-              shadowColor={bubblegumColors.text}
-              shadowOffset={{ width: 0, height: 2 }}
-              shadowOpacity={0.05}
-              shadowRadius={8}
-            >
-              <Text fontSize={12} fontWeight="700" color={bubblegumColors.textMuted} textTransform="uppercase" letterSpacing={1}>
-                My Pet
+            <View style={styles.card}>
+              <Text style={styles.cardLabel}>My Pet</Text>
+              <Text style={styles.petName}>{user.pet!.name}</Text>
+              <Text style={styles.petBreed}>
+                {user.pet!.breed} · {user.pet!.age}yo
               </Text>
-              <XStack alignItems="center" gap="$3">
-                <YStack flex={1}>
-                  <Text fontSize={20} fontWeight="800" color={bubblegumColors.text}>
-                    {user.pet!.name}
-                  </Text>
-                  <Text fontSize={14} color={bubblegumColors.primary} fontWeight="600">
-                    {user.pet!.breed} · {user.pet!.age}yo
-                  </Text>
-                </YStack>
-              </XStack>
-              <XStack flexWrap="wrap" gap="$2">
+              <View style={styles.tagsRow}>
                 {user.pet!.tags.map((tag) => (
-                  <YStack
-                    key={tag.id}
-                    backgroundColor={bubblegumColors.backgroundMuted}
-                    borderRadius={20}
-                    paddingHorizontal="$3"
-                    paddingVertical="$1"
-                  >
-                    <Text fontSize={12} color={bubblegumColors.primary} fontWeight="600">
-                      {tag.emoji} {tag.label}
-                    </Text>
-                  </YStack>
+                  <View key={tag.id} style={styles.tag}>
+                    <Text style={styles.tagText}>{tag.emoji} {tag.label}</Text>
+                  </View>
                 ))}
-              </XStack>
-            </YStack>
+              </View>
+            </View>
           )}
 
-          {/* Stats */}
-          <XStack gap="$3">
-            <YStack
-              flex={1}
-              backgroundColor={bubblegumColors.backgroundCard}
-              borderRadius={16}
-              padding="$4"
-              alignItems="center"
-              gap="$1"
-            >
-              <Heart color={bubblegumColors.primary} size={22} />
-              <Text fontSize={22} fontWeight="900" color={bubblegumColors.text}>{likesSent}</Text>
-              <Text fontSize={12} color={bubblegumColors.textMuted}>Likes sent</Text>
-            </YStack>
-            <YStack
-              flex={1}
-              backgroundColor={bubblegumColors.backgroundCard}
-              borderRadius={16}
-              padding="$4"
-              alignItems="center"
-              gap="$1"
-            >
-              <Text fontSize={22}>💕</Text>
-              <Text fontSize={22} fontWeight="900" color={bubblegumColors.text}>{matchCount}</Text>
-              <Text fontSize={12} color={bubblegumColors.textMuted}>Matches</Text>
-            </YStack>
-          </XStack>
-
-          {/* Superlikes row */}
-          <YStack
-            backgroundColor={bubblegumColors.backgroundCard}
-            borderRadius={16}
-            padding="$4"
-            flexDirection="row"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <XStack alignItems="center" gap="$2">
-              <Star color={bubblegumColors.warning} size={20} />
-              <YStack>
-                <Text fontSize={15} fontWeight="700" color={bubblegumColors.text}>
-                  Superlikes remaining
-                </Text>
-                <Text fontSize={13} color={bubblegumColors.textMuted}>
-                  {user.superlikes} left today
-                </Text>
-              </YStack>
-            </XStack>
-            <Button
-              onPress={() => router.push('/paywall/superlikes')}
-              backgroundColor={bubblegumColors.warning}
-              borderRadius={20}
-              paddingHorizontal="$3"
-              height={36}
-              pressStyle={{ opacity: 0.85 }}
-            >
-              <Text color="white" fontWeight="700" fontSize={13}>Get more</Text>
-            </Button>
-          </YStack>
+          {/* Get more superlikes */}
+          <View style={styles.card}>
+            <View style={styles.superlikeRow}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.superlikeTitle}>Superlikes</Text>
+                <Text style={styles.superlikeSub}>{user.superlikes} remaining today</Text>
+              </View>
+              <TouchableOpacity
+                style={styles.getMoreBtn}
+                onPress={() => router.push('/paywall/superlikes')}
+                activeOpacity={0.85}
+              >
+                <Text style={styles.getMoreText}>Get more</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
 
           {/* Premium upsell */}
           {!user.isPremium && (
-            <Button
+            <TouchableOpacity
+              style={styles.premiumCta}
               onPress={() => router.push('/paywall/subscription')}
-              backgroundColor={bubblegumColors.primary}
-              borderRadius={16}
-              height={56}
-              pressStyle={{ opacity: 0.88, scale: 0.98 }}
-              marginTop="$2"
+              activeOpacity={0.88}
             >
-              <XStack alignItems="center" gap="$2">
-                <Crown color="white" size={18} />
-                <Text color="white" fontWeight="800" fontSize={16}>
-                  Upgrade to Premium
-                </Text>
-              </XStack>
-            </Button>
+              <Crown color={DS.white} size={18} />
+              <Text style={styles.premiumCtaText}>Upgrade to Premium</Text>
+            </TouchableOpacity>
           )}
 
-          {/* Reset onboarding (dev helper) */}
-          <Button
+          {/* Dev reset */}
+          <TouchableOpacity
+            style={styles.resetBtn}
             onPress={() => {
               Alert.alert('Reset Profile', 'This will restart onboarding.', [
                 { text: 'Cancel' },
@@ -270,43 +180,249 @@ export function ProfileScreen() {
                       location: null,
                       onboardingComplete: false,
                       superlikes: 3,
-                      isPremium: false })
+                      isPremium: false,
+                    })
                     router.replace('/onboarding')
-                  } },
+                  },
+                },
               ])
             }}
-            backgroundColor="transparent"
-            borderRadius={12}
-            marginTop="$2"
-            marginBottom="$4"
+            activeOpacity={0.7}
           >
-            <Text color={bubblegumColors.textMuted} fontSize={13}>
-              Reset Profile (Dev)
-            </Text>
-          </Button>
-        </YStack>
+            <Text style={styles.resetText}>Reset Profile (Dev)</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: bubblegumColors.background },
-  scroll: { paddingBottom: 40 },
+  safe: {
+    flex: 1,
+    backgroundColor: DS.surface,
+  },
+  scroll: {
+    paddingBottom: DS.space.xxxl,
+  },
+  gradientHeader: {
+    paddingTop: DS.space.xl,
+    paddingBottom: DS.space.xxxl,
+    alignItems: 'center',
+    gap: DS.space.sm,
+    position: 'relative',
+    overflow: 'hidden',
+  },
+  headerWatermark: {
+    position: 'absolute',
+    fontSize: 160,
+    right: -20,
+    top: -10,
+    opacity: 0.08,
+    transform: [{ rotate: '15deg' }],
+  },
+  avatar: {
+    width: 100,
+    height: 100,
+    borderRadius: DS.radius.avatar,
+    borderWidth: 4,
+    borderColor: 'rgba(255,255,255,0.5)',
+  },
+  avatarEmpty: {
+    backgroundColor: 'rgba(255,255,255,0.25)',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerName: {
+    ...DS.text_section,
+    fontFamily: DS.font.display,
+    color: DS.white,
+    letterSpacing: -0.2,
+  },
+  premiumBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DS.space.xs,
+    backgroundColor: 'rgba(255,255,255,0.20)',
+    borderRadius: DS.radius.pill,
+    paddingHorizontal: DS.space.md,
+    paddingVertical: DS.space.xs,
+    borderWidth: 1,
+    borderColor: 'rgba(255,255,255,0.30)',
+  },
+  premiumBadgeText: {
+    fontSize: 12,
+    color: DS.white,
+    fontWeight: '800',
+  },
+  content: {
+    paddingHorizontal: DS.space.base,
+    paddingTop: DS.space.base,
+    gap: DS.space.md,
+    marginTop: -DS.space.base,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    gap: DS.space.md,
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: DS.cardBg,
+    borderRadius: DS.radius.md,
+    borderWidth: 1,
+    borderColor: DS.cardBorder,
+    padding: DS.space.base,
+    alignItems: 'center',
+    gap: DS.space.xs,
+    ...DS.shadow.card,
+  },
+  statNumber: {
+    fontSize: 24,
+    fontWeight: '900',
+    color: DS.text,
+    fontFamily: DS.font.display,
+  },
+  statLabel: {
+    fontSize: 11,
+    color: DS.muted,
+    fontWeight: '600',
+  },
+  card: {
+    backgroundColor: DS.cardBg,
+    borderRadius: DS.radius.md,
+    borderWidth: 1,
+    borderColor: DS.cardBorder,
+    padding: DS.space.base,
+    gap: DS.space.sm,
+    ...DS.shadow.card,
+  },
+  cardLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: DS.muted,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
+  editRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DS.space.sm,
+  },
   nameInput: {
     flex: 1,
     fontSize: 17,
-    color: bubblegumColors.text,
+    color: DS.text,
     borderWidth: 2,
-    borderColor: bubblegumColors.primary,
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    backgroundColor: bubblegumColors.background,
-    fontWeight: '600' },
-  profilePhoto: {
-    width: 140,
-    height: 140,
-    borderRadius: 70,
-    borderWidth: 4,
-    borderColor: bubblegumColors.primaryLight } })
+    borderColor: DS.primary,
+    borderRadius: DS.radius.md,
+    paddingHorizontal: DS.space.md,
+    paddingVertical: DS.space.sm,
+    backgroundColor: DS.surface,
+    fontWeight: '600',
+  },
+  saveBtn: {
+    backgroundColor: DS.primary,
+    borderRadius: DS.radius.md,
+    paddingHorizontal: DS.space.md,
+    height: 44,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  saveBtnText: {
+    color: DS.white,
+    fontWeight: '700',
+  },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  nameValue: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: DS.text,
+  },
+  petName: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: DS.text,
+    fontFamily: DS.font.display,
+  },
+  petBreed: {
+    ...DS.text_caption,
+    color: DS.primary,
+    fontWeight: '600',
+    marginTop: -2,
+  },
+  tagsRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: DS.space.sm,
+    marginTop: DS.space.xs,
+  },
+  tag: {
+    backgroundColor: 'rgba(255,107,157,0.08)',
+    borderRadius: DS.radius.pill,
+    borderWidth: 1,
+    borderColor: DS.cardBorder,
+    paddingHorizontal: DS.space.md,
+    paddingVertical: DS.space.xs,
+  },
+  tagText: {
+    fontSize: 12,
+    color: DS.primary,
+    fontWeight: '600',
+  },
+  superlikeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  superlikeTitle: {
+    fontSize: 15,
+    fontWeight: '700',
+    color: DS.text,
+  },
+  superlikeSub: {
+    ...DS.text_caption,
+    color: DS.muted,
+    marginTop: 2,
+  },
+  getMoreBtn: {
+    backgroundColor: DS.superlike,
+    borderRadius: DS.radius.pill,
+    paddingHorizontal: DS.space.md,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  getMoreText: {
+    color: DS.white,
+    fontWeight: '700',
+    fontSize: 13,
+  },
+  premiumCta: {
+    backgroundColor: DS.primary,
+    borderRadius: DS.radius.md,
+    height: 56,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: DS.space.sm,
+    ...DS.shadow.elevated,
+  },
+  premiumCtaText: {
+    color: DS.white,
+    fontWeight: '800',
+    fontSize: 16,
+    fontFamily: DS.font.display,
+  },
+  resetBtn: {
+    alignItems: 'center',
+    paddingVertical: DS.space.md,
+    marginTop: DS.space.sm,
+  },
+  resetText: {
+    ...DS.text_caption,
+    color: DS.muted,
+  },
+})

@@ -9,10 +9,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native'
-import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Text, XStack, YStack } from 'tamagui'
+import { LinearGradient } from 'expo-linear-gradient'
+import { Text } from 'tamagui'
 import { useRouter } from 'expo-router'
-import { bubblegumColors } from '@my/config'
+import { DS } from '../../theme'
 import { useAppContext } from '../../context/AppContext'
 
 const AnimatedView = Animated.View as React.ComponentType<React.ComponentProps<typeof View>>
@@ -23,7 +23,8 @@ const PAWS = ['🐾', '🐾', '💕', '🐾', '⭐', '🐾', '💕', '🐾', '�
 function FloatingPaw({
   emoji,
   delay,
-  startX }: {
+  startX,
+}: {
   emoji: string
   delay: number
   startX: number
@@ -38,18 +39,12 @@ function FloatingPaw({
       Animated.sequence([
         Animated.delay(delay),
         Animated.parallel([
-          Animated.timing(translateY, {
-            toValue: -100,
-            duration: 3000,
-            useNativeDriver: true }),
+          Animated.timing(translateY, { toValue: -100, duration: 3000, useNativeDriver: true }),
           Animated.sequence([
             Animated.timing(opacity, { toValue: 1, duration: 400, useNativeDriver: true }),
             Animated.timing(opacity, { toValue: 0, duration: 600, delay: 2000, useNativeDriver: true }),
           ]),
-          Animated.timing(rotate, {
-            toValue: 1,
-            duration: 3000,
-            useNativeDriver: true }),
+          Animated.timing(rotate, { toValue: 1, duration: 3000, useNativeDriver: true }),
         ]),
         Animated.parallel([
           Animated.timing(translateY, { toValue: H + 50, duration: 0, useNativeDriver: true }),
@@ -62,19 +57,11 @@ function FloatingPaw({
     return () => anim.stop()
   }, [])
 
-  const spin = rotate.interpolate({
-    inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'] })
+  const spin = rotate.interpolate({ inputRange: [0, 1], outputRange: ['0deg', '360deg'] })
 
   return (
     <AnimatedView
-      style={[
-        styles.floatingPaw,
-        {
-          left: startX,
-          transform: [{ translateY }, { rotate: spin }],
-          opacity },
-      ]}
+      style={[styles.floatingPaw, { left: startX, transform: [{ translateY }, { rotate: spin }], opacity }]}
     >
       <Text style={styles.pawEmoji}>{emoji}</Text>
     </AnimatedView>
@@ -85,21 +72,13 @@ export function MatchScreen() {
   const router = useRouter()
   const { pendingMatch, clearMatch, user } = useAppContext()
 
-  // Scale-in animation
-  const scale = useRef(new Animated.Value(0.5)).current
+  const scale = useRef(new Animated.Value(0.7)).current
   const opacity = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
     Animated.parallel([
-      Animated.spring(scale, {
-        toValue: 1,
-        tension: 50,
-        friction: 7,
-        useNativeDriver: true }),
-      Animated.timing(opacity, {
-        toValue: 1,
-        duration: 300,
-        useNativeDriver: true }),
+      Animated.spring(scale, { toValue: 1, tension: 60, friction: 7, useNativeDriver: true }),
+      Animated.timing(opacity, { toValue: 1, duration: 250, useNativeDriver: true }),
     ]).start()
   }, [])
 
@@ -111,7 +90,7 @@ export function MatchScreen() {
   function handleSendWoof() {
     clearMatch()
     router.back()
-    // Stub — real implementation would open a chat screen
+    // Stub — real: open chat screen
   }
 
   const targetProfile = pendingMatch?.targetProfile
@@ -119,8 +98,13 @@ export function MatchScreen() {
   const targetPetPhoto = targetProfile?.pet.photos[0]
 
   return (
-    <SafeAreaView style={styles.safe}>
-      {/* Floating paws background */}
+    <LinearGradient
+      colors={DS.gradient}
+      start={{ x: 0.2, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.gradient}
+    >
+      {/* Paw confetti */}
       {PAWS.map((emoji, i) => (
         <FloatingPaw
           key={i}
@@ -130,142 +114,190 @@ export function MatchScreen() {
         />
       ))}
 
-      <AnimatedView style={[styles.content, { transform: [{ scale }], opacity }]}>
-        {/* Match heading */}
-        <YStack alignItems="center" gap="$2">
+      {/* Watermark paw */}
+      <Text style={styles.watermark}>🐾</Text>
+
+      {/* Match card — white on gradient */}
+      <AnimatedView style={[styles.card, { transform: [{ scale }], opacity }]}>
+        {/* Match label */}
+        <View style={styles.matchHeader}>
           <Text style={styles.matchEmoji}>💕</Text>
           <Text style={styles.matchTitle}>It's a Match!</Text>
-          <Text style={styles.matchSubtitle}>
+          <Text style={styles.matchSub}>
             {user.pet?.name ?? 'Your pet'} and {targetProfile?.pet.name ?? 'them'} both liked each other!
           </Text>
-        </YStack>
+        </View>
 
         {/* Photos */}
-        <XStack alignItems="center" justifyContent="center" gap="$4" marginVertical={24}>
-          {/* User pet */}
-          <YStack style={styles.photoFrame}>
+        <View style={styles.photosRow}>
+          <View style={styles.photoRing}>
             {userPetPhoto ? (
-              <Image
-                source={{ uri: userPetPhoto }}
-                style={styles.photo}
-                resizeMode="cover"
-              />
+              <Image source={{ uri: userPetPhoto }} style={styles.photo} resizeMode="cover" />
             ) : (
-              <YStack style={[styles.photo, styles.photoPlaceholder]}>
-                <Text fontSize={36}>🐾</Text>
-              </YStack>
+              <View style={styles.photoEmpty}>
+                <Text style={{ fontSize: 36 }}>🐾</Text>
+              </View>
             )}
-          </YStack>
+          </View>
 
           <Text style={styles.heartBetween}>❤️</Text>
 
-          {/* Match pet */}
-          <YStack style={styles.photoFrame}>
+          <View style={styles.photoRing}>
             {targetPetPhoto ? (
-              <Image
-                source={{ uri: targetPetPhoto }}
-                style={styles.photo}
-                resizeMode="cover"
-              />
+              <Image source={{ uri: targetPetPhoto }} style={styles.photo} resizeMode="cover" />
             ) : (
-              <YStack style={[styles.photo, styles.photoPlaceholder]}>
-                <Text fontSize={36}>🐾</Text>
-              </YStack>
+              <View style={styles.photoEmpty}>
+                <Text style={{ fontSize: 36 }}>🐾</Text>
+              </View>
             )}
-          </YStack>
-        </XStack>
+          </View>
+        </View>
 
         {/* Names */}
-        <XStack justifyContent="center" gap="$6" marginBottom={32}>
-          <Text style={styles.petNameLabel}>{user.pet?.name ?? 'Your pet'}</Text>
-          <Text style={styles.petNameLabel}>{targetProfile?.pet.name ?? '...'}</Text>
-        </XStack>
+        <View style={styles.namesRow}>
+          <Text style={styles.petLabel}>{user.pet?.name ?? 'Your pet'}</Text>
+          <Text style={styles.petLabel}>{targetProfile?.pet.name ?? '...'}</Text>
+        </View>
 
-        {/* CTA buttons */}
-        <YStack gap="$3" paddingHorizontal={24} width="100%">
-          <Button
+        {/* CTAs */}
+        <View style={styles.ctaSection}>
+          {/* White pill CTA — primary action */}
+          <TouchableOpacity
+            style={styles.woofButton}
             onPress={handleSendWoof}
-            backgroundColor={bubblegumColors.primary}
-            borderRadius={30}
-            height={56}
-            pressStyle={{ opacity: 0.88, scale: 0.97 }}
+            activeOpacity={0.88}
           >
-            <Text color="white" fontWeight="800" fontSize={17}>
-              Send a Woof 🐾
-            </Text>
-          </Button>
-          <TouchableOpacity onPress={handleKeepSwiping} style={styles.skipButton}>
+            <Text style={styles.woofText}>Send a Woof 🐾</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity style={styles.skipButton} onPress={handleKeepSwiping} activeOpacity={0.7}>
             <Text style={styles.skipText}>Keep Swiping</Text>
           </TouchableOpacity>
-        </YStack>
+        </View>
       </AnimatedView>
-    </SafeAreaView>
+    </LinearGradient>
   )
 }
 
 const styles = StyleSheet.create({
-  safe: {
+  gradient: {
     flex: 1,
-    backgroundColor: 'rgba(255, 107, 157, 0.92)',
     alignItems: 'center',
-    justifyContent: 'center' },
+    justifyContent: 'center',
+  },
+  watermark: {
+    position: 'absolute',
+    fontSize: 280,
+    bottom: -40,
+    left: -60,
+    opacity: 0.06,
+    transform: [{ rotate: '-15deg' }],
+    zIndex: 0,
+  },
   floatingPaw: {
-    position: 'absolute' },
+    position: 'absolute',
+    zIndex: 1,
+  },
   pawEmoji: {
-    fontSize: 24 },
-  content: {
+    fontSize: 24,
+  },
+  card: {
     width: W - 48,
-    backgroundColor: 'white',
+    backgroundColor: DS.cardBg,
     borderRadius: 28,
-    paddingVertical: 36,
-    paddingHorizontal: 24,
+    paddingVertical: DS.space.xxxl,
+    paddingHorizontal: DS.space.xl,
     alignItems: 'center',
-    shadowColor: bubblegumColors.primaryDark,
-    shadowOffset: { width: 0, height: 12 },
-    shadowOpacity: 0.3,
-    shadowRadius: 24,
-    elevation: 16 },
+    ...DS.shadow.elevated,
+    zIndex: 2,
+  },
+  matchHeader: {
+    alignItems: 'center',
+    gap: DS.space.sm,
+    marginBottom: DS.space.xl,
+  },
   matchEmoji: {
-    fontSize: 48 },
+    fontSize: 48,
+  },
   matchTitle: {
-    fontSize: 34,
-    fontWeight: '900',
-    color: bubblegumColors.primary,
-    letterSpacing: -0.5 },
-  matchSubtitle: {
-    fontSize: 15,
-    color: bubblegumColors.textMuted,
+    ...DS.text_hero,
+    fontFamily: DS.font.display,
+    color: DS.primary,
+    letterSpacing: -0.5,
+  },
+  matchSub: {
+    ...DS.text_body,
+    color: DS.muted,
     textAlign: 'center',
     lineHeight: 22,
-    paddingHorizontal: 8 },
-  photoFrame: {
-    borderRadius: 70,
+    paddingHorizontal: DS.space.sm,
+  },
+  photosRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: DS.space.lg,
+    marginBottom: DS.space.base,
+  },
+  photoRing: {
+    borderRadius: DS.radius.avatar,
     overflow: 'hidden',
     borderWidth: 4,
-    borderColor: bubblegumColors.primaryLight,
-    shadowColor: bubblegumColors.primary,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 12,
-    elevation: 6 },
+    borderColor: DS.cardBorder,
+    ...DS.shadow.card,
+  },
   photo: {
     width: 110,
     height: 110,
-    borderRadius: 55 },
-  photoPlaceholder: {
-    backgroundColor: bubblegumColors.backgroundMuted,
+    borderRadius: DS.radius.avatar,
+  },
+  photoEmpty: {
+    width: 110,
+    height: 110,
+    borderRadius: DS.radius.avatar,
+    backgroundColor: DS.surface,
     alignItems: 'center',
-    justifyContent: 'center' },
+    justifyContent: 'center',
+  },
   heartBetween: {
-    fontSize: 28 },
-  petNameLabel: {
-    fontSize: 15,
+    fontSize: 28,
+  },
+  namesRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    width: '100%',
+    marginBottom: DS.space.xxl,
+    paddingHorizontal: DS.space.base,
+  },
+  petLabel: {
+    ...DS.text_caption,
     fontWeight: '700',
-    color: bubblegumColors.text },
+    color: DS.text,
+  },
+  ctaSection: {
+    width: '100%',
+    gap: DS.space.sm,
+  },
+  woofButton: {
+    backgroundColor: DS.primary,
+    borderRadius: DS.radius.pill,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  woofText: {
+    ...DS.text_section,
+    fontFamily: DS.font.display,
+    color: DS.white,
+    fontSize: 17,
+  },
   skipButton: {
     alignItems: 'center',
-    paddingVertical: 12 },
+    paddingVertical: DS.space.md,
+  },
   skipText: {
-    fontSize: 15,
-    color: bubblegumColors.textMuted,
-    fontWeight: '600' } })
+    ...DS.text_body,
+    color: DS.muted,
+    fontWeight: '600',
+  },
+})

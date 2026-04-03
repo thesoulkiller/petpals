@@ -1,12 +1,12 @@
 'use client'
 
 import React from 'react'
-import { StyleSheet, Alert, ScrollView } from 'react-native'
+import { StyleSheet, Alert, ScrollView, View, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Text, XStack, YStack } from 'tamagui'
+import { Text } from 'tamagui'
 import { Check, ChevronLeft, Crown } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
-import { bubblegumColors } from '@my/config'
+import { DS } from '../../theme'
 
 interface TierCardProps {
   title: string
@@ -20,94 +20,45 @@ interface TierCardProps {
 
 function TierCard({ title, price, period, features, highlighted, badge, onPress }: TierCardProps) {
   return (
-    <YStack
-      backgroundColor={highlighted ? bubblegumColors.primary : bubblegumColors.backgroundCard}
-      borderRadius={20}
-      padding="$5"
-      gap="$3"
-      borderWidth={highlighted ? 0 : 2}
-      borderColor={bubblegumColors.border}
-      position="relative"
-      shadowColor={highlighted ? bubblegumColors.primary : bubblegumColors.text}
-      shadowOffset={{ width: 0, height: highlighted ? 8 : 2 }}
-      shadowOpacity={highlighted ? 0.25 : 0.05}
-      shadowRadius={highlighted ? 20 : 8}
-    >
+    <View style={[styles.tierCard, highlighted && styles.tierCardHighlighted]}>
       {badge && (
-        <YStack
-          position="absolute"
-          top={-12}
-          alignSelf="center"
-          backgroundColor={bubblegumColors.secondary}
-          borderRadius={20}
-          paddingHorizontal="$3"
-          paddingVertical="$1"
-        >
-          <Text fontSize={11} fontWeight="800" color="white">
-            {badge}
-          </Text>
-        </YStack>
+        <View style={styles.tierBadge}>
+          <Text style={styles.tierBadgeText}>{badge}</Text>
+        </View>
       )}
 
-      <YStack gap="$1">
-        <Text
-          fontSize={16}
-          fontWeight="800"
-          color={highlighted ? 'white' : bubblegumColors.text}
-        >
-          {title}
-        </Text>
-        <XStack alignItems="baseline" gap="$1">
-          <Text
-            fontSize={30}
-            fontWeight="900"
-            color={highlighted ? 'white' : bubblegumColors.text}
-          >
-            {price}
-          </Text>
-          <Text
-            fontSize={13}
-            color={highlighted ? 'rgba(255,255,255,0.7)' : bubblegumColors.textMuted}
-          >
-            /{period}
-          </Text>
-        </XStack>
-      </YStack>
+      <View style={styles.tierHeader}>
+        <Text style={[styles.tierTitle, highlighted && styles.tierTextWhite]}>{title}</Text>
+        <View style={styles.tierPriceRow}>
+          <Text style={[styles.tierPrice, highlighted && styles.tierTextWhite]}>{price}</Text>
+          <Text style={[styles.tierPeriod, highlighted && styles.tierPeriodWhite]}>/{period}</Text>
+        </View>
+      </View>
 
-      <YStack gap="$2">
+      <View style={styles.featureList}>
         {features.map((f) => (
-          <XStack key={f} alignItems="center" gap="$2">
+          <View key={f} style={styles.featureRow}>
             <Check
-              color={highlighted ? 'white' : bubblegumColors.success}
+              color={highlighted ? DS.white : DS.match}
               size={16}
             />
-            <Text
-              fontSize={14}
-              color={highlighted ? 'rgba(255,255,255,0.9)' : bubblegumColors.text}
-              flex={1}
-            >
+            <Text style={[styles.featureText, highlighted && styles.featureTextWhite]}>
               {f}
             </Text>
-          </XStack>
+          </View>
         ))}
-      </YStack>
+      </View>
 
-      <Button
+      <TouchableOpacity
         onPress={onPress}
-        backgroundColor={highlighted ? 'white' : bubblegumColors.primary}
-        borderRadius={30}
-        height={48}
-        pressStyle={{ opacity: 0.85, scale: 0.97 }}
+        style={[styles.tierBtn, highlighted && styles.tierBtnHighlighted]}
+        activeOpacity={0.85}
       >
-        <Text
-          color={highlighted ? bubblegumColors.primary : 'white'}
-          fontWeight="800"
-          fontSize={15}
-        >
+        <Text style={[styles.tierBtnText, highlighted && styles.tierBtnTextHighlighted]}>
           {title === 'Free' ? 'Current Plan' : `Subscribe — ${price}/${period}`}
         </Text>
-      </Button>
-    </YStack>
+      </TouchableOpacity>
+    </View>
   )
 }
 
@@ -124,36 +75,35 @@ export function SubscriptionScreen() {
 
   return (
     <SafeAreaView style={styles.safe}>
-      <YStack flex={1} backgroundColor={bubblegumColors.background}>
+      <View style={styles.container}>
         {/* Nav */}
-        <XStack paddingHorizontal="$4" paddingTop="$3" paddingBottom="$2" alignItems="center">
-          <Button
+        <View style={styles.nav}>
+          <TouchableOpacity
             onPress={() => router.back()}
-            backgroundColor="transparent"
-            width={40}
-            height={40}
-            padding={0}
-            icon={<ChevronLeft color={bubblegumColors.text} size={24} />}
-          />
-          <Text fontSize={20} fontWeight="900" color={bubblegumColors.text} flex={1} textAlign="center">
-            Go Premium 💎
-          </Text>
-          <YStack width={40} />
-        </XStack>
+            style={styles.navBack}
+            activeOpacity={0.7}
+          >
+            <ChevronLeft color={DS.text} size={24} />
+          </TouchableOpacity>
+          <Text style={styles.navTitle}>Go Premium 💎</Text>
+          <View style={styles.navSpacer} />
+        </View>
 
-        <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+        <ScrollView
+          contentContainerStyle={styles.scroll}
+          showsVerticalScrollIndicator={false}
+        >
           {/* Hero */}
-          <YStack alignItems="center" paddingVertical="$4" gap="$2">
-            <Crown color={bubblegumColors.warning} size={48} />
-            <Text fontSize={26} fontWeight="900" color={bubblegumColors.text} textAlign="center">
-              Find your pet's perfect match
-            </Text>
-            <Text fontSize={15} color={bubblegumColors.textMuted} textAlign="center" lineHeight={22}>
+          <View style={styles.hero}>
+            <Crown color={DS.superlike} size={48} />
+            <Text style={styles.heroTitle}>Find your pet's perfect match</Text>
+            <Text style={styles.heroSubtitle}>
               Unlock all features and help your furry friend find their forever playmate.
             </Text>
-          </YStack>
+          </View>
 
-          <YStack paddingHorizontal="$4" gap="$4">
+          {/* Tier cards */}
+          <View style={styles.tiers}>
             <TierCard
               title="Free"
               price="$0"
@@ -195,18 +145,152 @@ export function SubscriptionScreen() {
               badge="🔥 Best Value"
               onPress={() => handleSubscribe('Annual', '$59.99')}
             />
-          </YStack>
+          </View>
 
-          <Text fontSize={11} color={bubblegumColors.textLight} textAlign="center" paddingHorizontal="$6" paddingVertical="$4">
-            Subscriptions auto-renew unless cancelled 24 hours before renewal. Payment stub — no real charges.
+          <Text style={styles.legal}>
+            Subscriptions auto-renew unless cancelled 24 hours before renewal.{'\n'}
+            Payment stub — no real charges.
           </Text>
         </ScrollView>
-      </YStack>
+      </View>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: bubblegumColors.background },
-  scroll: { paddingBottom: 40 },
+  safe: { flex: 1, backgroundColor: DS.surface },
+  container: { flex: 1, backgroundColor: DS.surface },
+  nav: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: DS.space.base,
+    paddingTop: DS.space.md,
+    paddingBottom: DS.space.sm,
+  },
+  navBack: {
+    width: 40,
+    height: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  navTitle: {
+    ...DS.text_section,
+    fontFamily: DS.font.display,
+    color: DS.text,
+    flex: 1,
+    textAlign: 'center',
+  },
+  navSpacer: { width: 40 },
+  scroll: {
+    paddingHorizontal: DS.space.base,
+    paddingBottom: DS.space.xxl,
+    gap: DS.space.xl,
+  },
+  hero: {
+    alignItems: 'center',
+    paddingVertical: DS.space.base,
+    gap: DS.space.sm,
+  },
+  heroTitle: {
+    ...DS.text_title,
+    fontFamily: DS.font.display,
+    color: DS.text,
+    textAlign: 'center',
+  },
+  heroSubtitle: {
+    ...DS.text_body,
+    color: DS.muted,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  tiers: { gap: DS.space.lg },
+  tierCard: {
+    backgroundColor: DS.cardBg,
+    borderRadius: DS.radius.card,
+    padding: DS.space.lg,
+    gap: DS.space.base,
+    borderWidth: 1.5,
+    borderColor: DS.cardBorder,
+    ...DS.shadow.card,
+  },
+  tierCardHighlighted: {
+    backgroundColor: DS.primary,
+    borderColor: DS.primary,
+    ...DS.shadow.elevated,
+  },
+  tierBadge: {
+    position: 'absolute',
+    top: -13,
+    alignSelf: 'center',
+    backgroundColor: DS.superlike,
+    borderRadius: DS.radius.pill,
+    paddingHorizontal: DS.space.md,
+    paddingVertical: 3,
+  },
+  tierBadgeText: {
+    fontSize: 11,
+    fontWeight: '800',
+    color: '#2D1B00',
+  },
+  tierHeader: { gap: 4 },
+  tierTitle: {
+    fontSize: 16,
+    fontWeight: '800',
+    color: DS.text,
+  },
+  tierTextWhite: { color: DS.white },
+  tierPriceRow: {
+    flexDirection: 'row',
+    alignItems: 'baseline',
+    gap: 2,
+  },
+  tierPrice: {
+    fontSize: 30,
+    fontWeight: '900',
+    color: DS.text,
+  },
+  tierPeriod: {
+    fontSize: 13,
+    color: DS.muted,
+  },
+  tierPeriodWhite: { color: 'rgba(255,255,255,0.70)' },
+  featureList: { gap: DS.space.sm },
+  featureRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DS.space.sm,
+  },
+  featureText: {
+    ...DS.text_body,
+    color: DS.text,
+    flex: 1,
+  },
+  featureTextWhite: { color: 'rgba(255,255,255,0.90)' },
+  tierBtn: {
+    backgroundColor: DS.primary,
+    borderRadius: DS.radius.pill,
+    height: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: DS.space.sm,
+  },
+  tierBtnHighlighted: {
+    backgroundColor: DS.white,
+  },
+  tierBtnText: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: DS.white,
+  },
+  tierBtnTextHighlighted: {
+    color: DS.primary,
+  },
+  legal: {
+    ...DS.text_micro,
+    color: DS.muted,
+    textAlign: 'center',
+    paddingHorizontal: DS.space.xl,
+    opacity: 0.7,
+    lineHeight: 18,
+  },
 })

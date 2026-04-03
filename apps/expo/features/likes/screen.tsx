@@ -1,16 +1,12 @@
 'use client'
 
 import React, { useState } from 'react'
-import {
-  StyleSheet,
-  FlatList,
-  Image,
-  TouchableOpacity } from 'react-native'
+import { StyleSheet, FlatList, Image, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Text, XStack, YStack } from 'tamagui'
+import { Text } from 'tamagui'
 import { Lock } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
-import { bubblegumColors } from '@my/config'
+import { DS } from '../../theme'
 import { useAppContext } from '../../context/AppContext'
 import type { PetProfile } from '../../types/petpals'
 
@@ -18,7 +14,8 @@ function ProfileCard({
   profile,
   isMatch,
   isPremium,
-  onPress }: {
+  onPress,
+}: {
   profile: PetProfile
   isMatch: boolean
   isPremium: boolean
@@ -27,8 +24,8 @@ function ProfileCard({
   const blurred = isMatch && !isPremium
 
   return (
-    <TouchableOpacity onPress={onPress} style={styles.card}>
-      <YStack position="relative">
+    <TouchableOpacity onPress={onPress} style={styles.card} activeOpacity={0.88}>
+      <View style={styles.cardPhotoWrap}>
         <Image
           source={{ uri: profile.pet.photos[0] }}
           style={[styles.cardPhoto, blurred && styles.blurredPhoto]}
@@ -36,27 +33,25 @@ function ProfileCard({
           blurRadius={blurred ? 15 : 0}
         />
         {blurred && (
-          <YStack style={styles.lockOverlay}>
-            <Lock color="white" size={20} />
-            <Text color="white" fontSize={10} fontWeight="700" textAlign="center">
-              Premium
-            </Text>
-          </YStack>
+          <View style={styles.lockOverlay}>
+            <Lock color={DS.white} size={20} />
+            <Text style={styles.lockLabel}>Premium</Text>
+          </View>
         )}
         {isMatch && (
-          <YStack style={styles.matchBadge}>
-            <Text fontSize={10} color="white" fontWeight="800">MATCH 💕</Text>
-          </YStack>
+          <View style={styles.matchBadge}>
+            <Text style={styles.matchBadgeText}>MATCH 💕</Text>
+          </View>
         )}
-      </YStack>
-      <YStack padding="$2" gap="$0.5">
-        <Text fontSize={13} fontWeight="700" color={bubblegumColors.text} numberOfLines={1}>
+      </View>
+      <View style={styles.cardInfo}>
+        <Text style={styles.cardName} numberOfLines={1}>
           {blurred ? '???' : profile.pet.name}
         </Text>
-        <Text fontSize={11} color={bubblegumColors.textMuted} numberOfLines={1}>
-          {blurred ? profile.location.city : profile.location.city}
+        <Text style={styles.cardCity} numberOfLines={1}>
+          {profile.location.city}
         </Text>
-      </YStack>
+      </View>
     </TouchableOpacity>
   )
 }
@@ -68,9 +63,7 @@ export function LikesScreen() {
 
   const likeRecords = likes.filter((l) => l.type !== 'dislike')
   const matchRecords = likes.filter((l) => l.isMatch)
-
   const displayRecords = activeTab === 'matches' ? matchRecords : likeRecords
-
   const displayProfiles: PetProfile[] = displayRecords
     .map((r) => profiles.find((p) => p.id === r.targetProfileId))
     .filter((p): p is PetProfile => p !== undefined)
@@ -78,63 +71,54 @@ export function LikesScreen() {
   if (likes.length === 0) {
     return (
       <SafeAreaView style={styles.safe}>
-        <YStack flex={1} backgroundColor={bubblegumColors.background} alignItems="center" justifyContent="center" gap="$4" paddingHorizontal="$6">
-          <Text fontSize={48}>💕</Text>
-          <Text fontSize={22} fontWeight="800" color={bubblegumColors.text} textAlign="center">
-            No likes yet!
-          </Text>
-          <Text fontSize={15} color={bubblegumColors.textMuted} textAlign="center" lineHeight={22}>
+        <View style={styles.empty}>
+          <Text style={styles.emptyEmoji}>💕</Text>
+          <Text style={styles.emptyTitle}>No likes yet</Text>
+          <Text style={styles.emptyBody}>
             Start swiping in Discover to collect likes and matches.
           </Text>
-        </YStack>
+        </View>
       </SafeAreaView>
     )
   }
 
   return (
     <SafeAreaView style={styles.safe}>
-      <YStack flex={1} backgroundColor={bubblegumColors.background}>
+      <View style={styles.container}>
         {/* Header */}
-        <YStack paddingHorizontal="$4" paddingTop="$3" paddingBottom="$2">
-          <Text fontSize={24} fontWeight="900" color={bubblegumColors.text}>
-            Likes & Matches 💕
-          </Text>
-        </YStack>
+        <View style={styles.header}>
+          <Text style={styles.heading}>Likes & Matches</Text>
+        </View>
 
         {/* Tabs */}
-        <XStack paddingHorizontal="$4" gap="$3" marginBottom="$3">
+        <View style={styles.tabs}>
           {(['matches', 'likes'] as const).map((tab) => (
             <TouchableOpacity
               key={tab}
               onPress={() => setActiveTab(tab)}
               style={[styles.tab, activeTab === tab && styles.tabActive]}
+              activeOpacity={0.75}
             >
-              <Text
-                fontSize={14}
-                fontWeight="700"
-                color={activeTab === tab ? bubblegumColors.primary : bubblegumColors.textMuted}
-              >
-                {tab === 'matches' ? `Matches (${matchRecords.length})` : `Liked (${likeRecords.length})`}
+              <Text style={[styles.tabLabel, activeTab === tab && styles.tabLabelActive]}>
+                {tab === 'matches'
+                  ? `Matches (${matchRecords.length})`
+                  : `Liked (${likeRecords.length})`}
               </Text>
             </TouchableOpacity>
           ))}
-        </XStack>
+        </View>
 
-        {/* Premium upsell for matches */}
+        {/* Premium upsell */}
         {activeTab === 'matches' && !user.isPremium && matchRecords.length > 0 && (
-          <Button
+          <TouchableOpacity
+            style={styles.premiumBanner}
             onPress={() => router.push('/paywall/subscription')}
-            backgroundColor={bubblegumColors.primaryLight}
-            borderRadius={12}
-            marginHorizontal="$4"
-            marginBottom="$3"
-            height={48}
-            pressStyle={{ opacity: 0.9 }}
+            activeOpacity={0.88}
           >
-            <Text fontSize={13} color={bubblegumColors.primaryDark} fontWeight="700">
-              💎 Unlock matches with Premium
+            <Text style={styles.premiumBannerText}>
+              💎 Unlock all matches with Premium
             </Text>
-          </Button>
+          </TouchableOpacity>
         )}
 
         <FlatList
@@ -150,43 +134,108 @@ export function LikesScreen() {
                 profile={item}
                 isMatch={record?.isMatch ?? false}
                 isPremium={user.isPremium}
-                onPress={() => {/* stub: open profile detail */}}
+                onPress={() => {}}
               />
             )
           }}
           ListEmptyComponent={
-            <YStack flex={1} alignItems="center" paddingTop="$8" gap="$2">
-              <Text fontSize={32}>🐾</Text>
-              <Text fontSize={16} color={bubblegumColors.textMuted} textAlign="center">
+            <View style={styles.emptyList}>
+              <Text style={{ fontSize: 32 }}>🐾</Text>
+              <Text style={styles.emptyListText}>
                 {activeTab === 'matches' ? 'No matches yet — keep swiping!' : 'No likes sent yet!'}
               </Text>
-            </YStack>
+            </View>
           }
         />
-      </YStack>
+      </View>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: bubblegumColors.background },
-  grid: { paddingHorizontal: 16, paddingBottom: 24 },
-  row: { gap: 12, marginBottom: 12 },
+  safe: {
+    flex: 1,
+    backgroundColor: DS.surface,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: DS.surface,
+  },
+  header: {
+    paddingHorizontal: DS.space.base,
+    paddingTop: DS.space.md,
+    paddingBottom: DS.space.sm,
+  },
+  heading: {
+    ...DS.text_title,
+    fontFamily: DS.font.display,
+    color: DS.text,
+  },
+  tabs: {
+    flexDirection: 'row',
+    paddingHorizontal: DS.space.base,
+    gap: DS.space.md,
+    marginBottom: DS.space.md,
+  },
+  tab: {
+    paddingVertical: DS.space.sm,
+    paddingHorizontal: DS.space.xs,
+    borderBottomWidth: 2,
+    borderBottomColor: 'transparent',
+  },
+  tabActive: {
+    borderBottomColor: DS.primary,
+  },
+  tabLabel: {
+    ...DS.text_caption,
+    fontWeight: '700',
+    color: DS.muted,
+  },
+  tabLabelActive: {
+    color: DS.primary,
+  },
+  premiumBanner: {
+    marginHorizontal: DS.space.base,
+    marginBottom: DS.space.md,
+    backgroundColor: 'rgba(255,107,157,0.10)',
+    borderRadius: DS.radius.md,
+    borderWidth: 1,
+    borderColor: DS.cardBorder,
+    paddingVertical: DS.space.md,
+    alignItems: 'center',
+  },
+  premiumBannerText: {
+    ...DS.text_caption,
+    fontWeight: '700',
+    color: DS.primary,
+  },
+  grid: {
+    paddingHorizontal: DS.space.base,
+    paddingBottom: DS.space.xl,
+  },
+  row: {
+    gap: DS.space.md,
+    marginBottom: DS.space.md,
+  },
   card: {
     flex: 1,
-    backgroundColor: bubblegumColors.backgroundCard,
-    borderRadius: 16,
+    backgroundColor: DS.cardBg,
+    borderRadius: DS.radius.md,
+    borderWidth: 1,
+    borderColor: DS.cardBorder,
     overflow: 'hidden',
-    shadowColor: bubblegumColors.text,
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.06,
-    shadowRadius: 8,
-    elevation: 3 },
+    ...DS.shadow.card,
+  },
+  cardPhotoWrap: {
+    position: 'relative',
+  },
   cardPhoto: {
     width: '100%',
-    aspectRatio: 0.85 },
+    aspectRatio: 0.85,
+  },
   blurredPhoto: {
-    opacity: 0.7 },
+    opacity: 0.6,
+  },
   lockOverlay: {
     position: 'absolute',
     top: 0,
@@ -195,19 +244,72 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4 },
+    gap: DS.space.xs,
+  },
+  lockLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    color: DS.white,
+    textAlign: 'center',
+  },
   matchBadge: {
     position: 'absolute',
     top: 8,
     left: 8,
-    backgroundColor: bubblegumColors.primary,
-    borderRadius: 8,
-    paddingHorizontal: 6,
-    paddingVertical: 3 },
-  tab: {
-    paddingVertical: 8,
-    paddingHorizontal: 4,
-    borderBottomWidth: 2,
-    borderBottomColor: 'transparent' },
-  tabActive: {
-    borderBottomColor: bubblegumColors.primary } })
+    backgroundColor: DS.primary,
+    borderRadius: DS.radius.sm,
+    paddingHorizontal: DS.space.sm,
+    paddingVertical: DS.space.xs,
+  },
+  matchBadgeText: {
+    fontSize: 10,
+    color: DS.white,
+    fontWeight: '800',
+  },
+  cardInfo: {
+    padding: DS.space.sm,
+    gap: 2,
+  },
+  cardName: {
+    ...DS.text_caption,
+    fontWeight: '700',
+    color: DS.text,
+  },
+  cardCity: {
+    fontSize: 11,
+    color: DS.muted,
+  },
+  empty: {
+    flex: 1,
+    backgroundColor: DS.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: DS.space.base,
+    paddingHorizontal: DS.space.xxxl,
+  },
+  emptyEmoji: {
+    fontSize: 48,
+  },
+  emptyTitle: {
+    ...DS.text_title,
+    fontFamily: DS.font.display,
+    color: DS.text,
+    textAlign: 'center',
+  },
+  emptyBody: {
+    ...DS.text_body,
+    color: DS.muted,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  emptyList: {
+    alignItems: 'center',
+    paddingTop: DS.space.xxxl,
+    gap: DS.space.sm,
+  },
+  emptyListText: {
+    ...DS.text_body,
+    color: DS.muted,
+    textAlign: 'center',
+  },
+})

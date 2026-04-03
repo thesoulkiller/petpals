@@ -1,10 +1,9 @@
 'use client'
 
 import React from 'react'
-import { View, StyleSheet, Dimensions } from 'react-native'
-import { Button, Text, YStack } from 'tamagui'
+import { View, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native'
 import { RefreshCw } from '@tamagui/lucide-icons'
-import { bubblegumColors } from '@my/config'
+import { DS } from '../../theme'
 import { SwipeCard } from './SwipeCard'
 import type { PetProfile, SwipeDirection } from '../../types/petpals'
 
@@ -19,46 +18,19 @@ interface SwipeDeckProps {
 export function SwipeDeck({ profiles, onSwipe, onRefresh }: SwipeDeckProps) {
   if (profiles.length === 0) {
     return (
-      <YStack
-        flex={1}
-        alignItems="center"
-        justifyContent="center"
-        gap="$4"
-        paddingHorizontal="$6"
-      >
-        <Text fontSize={48}>🐾</Text>
-        <Text
-          fontSize={22}
-          fontWeight="800"
-          color={bubblegumColors.text}
-          textAlign="center"
-        >
-          No more pets nearby!
-        </Text>
-        <Text
-          fontSize={15}
-          color={bubblegumColors.textMuted}
-          textAlign="center"
-          lineHeight={22}
-        >
+      <View style={styles.emptyContainer}>
+        <Text style={styles.emptyPaw}>🐾</Text>
+        <Text style={styles.emptyTitle}>No more pets nearby!</Text>
+        <Text style={styles.emptySubtitle}>
           You've seen all available pals. Check back soon — new pets join every day!
         </Text>
         {onRefresh && (
-          <Button
-            onPress={onRefresh}
-            backgroundColor={bubblegumColors.primary}
-            borderRadius={30}
-            paddingHorizontal="$6"
-            paddingVertical="$3"
-            pressStyle={{ opacity: 0.85, scale: 0.97 }}
-            icon={<RefreshCw color="white" size={16} />}
-          >
-            <Text color="white" fontWeight="700" fontSize={15}>
-              Refresh
-            </Text>
-          </Button>
+          <TouchableOpacity style={styles.refreshBtn} onPress={onRefresh} activeOpacity={0.85}>
+            <RefreshCw color={DS.white} size={16} />
+            <Text style={styles.refreshText}>Refresh</Text>
+          </TouchableOpacity>
         )}
-      </YStack>
+      </View>
     )
   }
 
@@ -95,5 +67,43 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: DS.space.xl,
+    gap: DS.space.base,
+  },
+  emptyPaw: {
+    fontSize: 56,
+    marginBottom: DS.space.sm,
+  },
+  emptyTitle: {
+    ...DS.text_title,
+    fontFamily: DS.font.display,
+    color: DS.text,
+    textAlign: 'center',
+  },
+  emptySubtitle: {
+    ...DS.text_body,
+    color: DS.muted,
+    textAlign: 'center',
+    lineHeight: 22,
+  },
+  refreshBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DS.space.sm,
+    backgroundColor: DS.primary,
+    borderRadius: DS.radius.pill,
+    paddingHorizontal: DS.space.xl,
+    paddingVertical: DS.space.md,
+    marginTop: DS.space.sm,
+  },
+  refreshText: {
+    ...DS.text_body,
+    color: DS.white,
+    fontWeight: '700',
   },
 })

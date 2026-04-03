@@ -1,12 +1,12 @@
 'use client'
 
 import React, { useState } from 'react'
-import { StyleSheet, Image, TouchableOpacity, FlatList } from 'react-native'
+import { StyleSheet, Image, TouchableOpacity, FlatList, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Text, YStack, XStack } from 'tamagui'
+import { Text } from 'tamagui'
 import { Check } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
-import { bubblegumColors } from '@my/config'
+import { DS } from '../../theme'
 import { useAppContext } from '../../context/AppContext'
 import { OnboardingProgress } from './OnboardingProgress'
 import { PRESET_PHOTOS } from '../../types/petpals'
@@ -34,20 +34,22 @@ export function PhotosScreen() {
     router.push('/onboarding/location')
   }
 
+  const canContinue = selectedPhotos.length > 0
+
   return (
     <SafeAreaView style={styles.safe}>
-      <YStack flex={1} backgroundColor={bubblegumColors.background}>
+      <View style={styles.container}>
         <OnboardingProgress step={3} total={4} />
 
-        <YStack flex={1} paddingHorizontal={24} paddingTop={40} gap="$4">
-          <YStack gap="$2">
-            <Text fontSize={28} fontWeight="900" color={bubblegumColors.text}>
+        <View style={styles.body}>
+          <View style={styles.textBlock}>
+            <Text style={styles.title}>
               Pick {user.pet?.name ?? 'your pet'}'s best photos 📸
             </Text>
-            <Text fontSize={15} color={bubblegumColors.textMuted} lineHeight={22}>
-              Choose up to 4 photos. First one will be the profile pic!
+            <Text style={styles.subtitle}>
+              Choose up to 4. First one becomes the profile pic!
             </Text>
-          </YStack>
+          </View>
 
           <FlatList
             data={PRESET_PHOTOS}
@@ -61,79 +63,126 @@ export function PhotosScreen() {
                 <TouchableOpacity
                   onPress={() => togglePhoto(url)}
                   style={[styles.photoTile, selected && styles.photoTileSelected]}
+                  activeOpacity={0.85}
                 >
                   <Image source={{ uri: url }} style={styles.photoImage} resizeMode="cover" />
                   {selected && (
-                    <YStack style={styles.photoCheckBadge}>
-                      <Check color="white" size={14} />
-                      {orderIndex === 0 && (
-                        <Text style={styles.photoMainLabel}>MAIN</Text>
-                      )}
-                    </YStack>
+                    <View style={styles.checkBadge}>
+                      <Check color={DS.white} size={14} />
+                    </View>
+                  )}
+                  {selected && orderIndex === 0 && (
+                    <View style={styles.mainBadge}>
+                      <Text style={styles.mainBadgeText}>MAIN</Text>
+                    </View>
                   )}
                 </TouchableOpacity>
               )
             }}
             style={styles.list}
           />
-        </YStack>
+        </View>
 
-        <YStack paddingHorizontal={24} paddingBottom={32}>
-          <Button
+        <View style={styles.footer}>
+          <TouchableOpacity
             onPress={handleContinue}
-            disabled={selectedPhotos.length === 0}
-            backgroundColor={selectedPhotos.length > 0 ? bubblegumColors.primary : bubblegumColors.border}
-            borderRadius={30}
-            height={56}
-            pressStyle={{ opacity: 0.88, scale: 0.98 }}
+            style={[styles.ctaBtn, !canContinue && styles.ctaBtnDisabled]}
+            disabled={!canContinue}
+            activeOpacity={0.88}
           >
-            <Text color="white" fontWeight="800" fontSize={17}>
-              {selectedPhotos.length > 0
+            <Text style={styles.ctaText}>
+              {canContinue
                 ? `Continue with ${selectedPhotos.length} photo${selectedPhotos.length > 1 ? 's' : ''} →`
                 : 'Select at least 1 photo'}
             </Text>
-          </Button>
-        </YStack>
-      </YStack>
+          </TouchableOpacity>
+        </View>
+      </View>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: bubblegumColors.background },
+  safe: { flex: 1, backgroundColor: DS.surface },
+  container: { flex: 1, backgroundColor: DS.surface },
+  body: {
+    flex: 1,
+    paddingHorizontal: DS.space.xl,
+    paddingTop: DS.space.xxxl,
+    gap: DS.space.base,
+  },
+  textBlock: { gap: DS.space.sm },
+  title: {
+    ...DS.text_hero,
+    fontFamily: DS.font.display,
+    color: DS.text,
+  },
+  subtitle: {
+    ...DS.text_body,
+    color: DS.muted,
+    lineHeight: 22,
+  },
   list: { flex: 1 },
-  photoRow: { gap: 8, marginBottom: 8 },
+  photoRow: { gap: DS.space.sm, marginBottom: DS.space.sm },
   photoTile: {
     flex: 1,
-    aspectRatio: 0.8,
-    borderRadius: 16,
+    aspectRatio: 0.85,
+    borderRadius: DS.radius.md,
     overflow: 'hidden',
     borderWidth: 3,
     borderColor: 'transparent',
   },
   photoTileSelected: {
-    borderColor: bubblegumColors.primary,
+    borderColor: DS.primary,
   },
   photoImage: {
     width: '100%',
     height: '100%',
   },
-  photoCheckBadge: {
+  checkBadge: {
     position: 'absolute',
     top: 8,
     right: 8,
-    backgroundColor: bubblegumColors.primary,
-    borderRadius: 12,
-    width: 24,
-    height: 24,
+    width: 26,
+    height: 26,
+    borderRadius: DS.radius.pill,
+    backgroundColor: DS.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  photoMainLabel: {
+  mainBadge: {
     position: 'absolute',
-    bottom: -18,
-    fontSize: 8,
-    color: bubblegumColors.primary,
+    bottom: 8,
+    left: 8,
+    backgroundColor: DS.primary,
+    borderRadius: DS.radius.sm,
+    paddingHorizontal: DS.space.sm,
+    paddingVertical: 2,
+  },
+  mainBadgeText: {
+    fontSize: 9,
+    color: DS.white,
     fontWeight: '800',
+    letterSpacing: 0.5,
+  },
+  footer: {
+    paddingHorizontal: DS.space.xl,
+    paddingBottom: DS.space.xxl,
+  },
+  ctaBtn: {
+    backgroundColor: DS.primary,
+    borderRadius: DS.radius.pill,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ctaBtnDisabled: {
+    backgroundColor: DS.cardBorder,
+  },
+  ctaText: {
+    ...DS.text_section,
+    fontFamily: DS.font.display,
+    color: DS.white,
+    fontSize: 17,
   },
 })

@@ -1,5 +1,3 @@
-'use client'
-
 import React, {
   createContext,
   useCallback,
@@ -8,6 +6,8 @@ import React, {
   useReducer,
 } from 'react'
 import type { LikeRecord, MatchEvent, PetProfile, SwipeDirection, UserState } from '../types/petpals'
+
+const DAILY_LIKES_FREE = 20
 
 // ---------------------------------------------------------------------------
 // Haversine distance (km) between two lat/lng points
@@ -54,6 +54,7 @@ const defaultUser: UserState = {
   pet: null,
   location: null,
   superlikes: 3,
+  dailyLikesRemaining: DAILY_LIKES_FREE,
   isPremium: false,
   onboardingComplete: false,
 }
@@ -82,8 +83,7 @@ function appReducer(state: AppState, action: AppAction): AppState {
             : 'dislike'
 
       // 30% chance of mutual match for likes/superlikes
-      const isMatch =
-        likeType !== 'dislike' && Math.random() < 0.3
+      const isMatch = likeType !== 'dislike' && Math.random() < 0.3
 
       const record: LikeRecord = {
         id: `like_${Date.now()}_${profileId}`,
@@ -102,15 +102,21 @@ function appReducer(state: AppState, action: AppAction): AppState {
           ? { targetProfile, userPetName: state.user.pet.name }
           : null
 
-      // Deduct superlike from counter
+      // Deduct superlike (free users only)
       const superlikes =
-        likeType === 'superlike'
+        likeType === 'superlike' && !state.user.isPremium
           ? Math.max(0, state.user.superlikes - 1)
           : state.user.superlikes
 
+      // Deduct daily like (free users only; nopes are free)
+      const dailyLikesRemaining =
+        likeType === 'like' && !state.user.isPremium
+          ? Math.max(0, state.user.dailyLikesRemaining - 1)
+          : state.user.dailyLikesRemaining
+
       return {
         ...state,
-        user: { ...state.user, superlikes },
+        user: { ...state.user, superlikes, dailyLikesRemaining },
         swipedIds: newSwipedIds,
         likes: newLikes,
         pendingMatch,
@@ -193,8 +199,8 @@ export function AppProvider({ children, initialProfiles }: AppProviderProps) {
     dispatch({ type: 'SET_USER', payload: patch })
   }, [])
 
-  const completeOnboarding = useCallback((user: UserState) => {
-    dispatch({ type: 'COMPLETE_ONBOARDING', payload: user })
+  const completeOnboarding = useCallback((completedUser: UserState) => {
+    dispatch({ type: 'COMPLETE_ONBOARDING', payload: completedUser })
   }, [])
 
   const clearMatch = useCallback(() => {

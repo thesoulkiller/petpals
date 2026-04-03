@@ -11,18 +11,21 @@ SplashScreen.preventAutoHideAsync()
 const initialProfiles = petsData as PetProfile[]
 
 export default function RootLayout() {
-  const [interLoaded, interError] = useFonts({
+  const [fontsLoaded, fontsError] = useFonts({
     Inter: require('@tamagui/font-inter/otf/Inter-Medium.otf'),
     InterBold: require('@tamagui/font-inter/otf/Inter-Bold.otf'),
+    'ClashGrotesk-Bold': require('../assets/fonts/ClashGrotesk-Bold.ttf'),
+    'DMSans-Regular': require('../assets/fonts/DMSans-Regular.ttf'),
+    'DMSans-Medium': require('../assets/fonts/DMSans-Medium.ttf'),
   })
 
   useEffect(() => {
-    if (interLoaded || interError) {
+    if (fontsLoaded || fontsError) {
       SplashScreen.hideAsync()
     }
-  }, [interLoaded, interError])
+  }, [fontsLoaded, fontsError])
 
-  if (!interLoaded && !interError) {
+  if (!fontsLoaded && !fontsError) {
     return null
   }
 
@@ -38,6 +41,11 @@ export default function RootLayout() {
             options={{ presentation: 'transparentModal', animation: 'fade' }}
           />
           <Stack.Screen name="paywall" />
+          <Stack.Screen name="chat" />
+          <Stack.Screen
+            name="discover"
+            options={{ presentation: 'modal', headerShown: false }}
+          />
         </Stack>
       </AppProvider>
     </Provider>

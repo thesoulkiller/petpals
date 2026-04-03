@@ -12,10 +12,11 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window')
 interface SwipeDeckProps {
   profiles: PetProfile[]
   onSwipe: (profileId: string, direction: SwipeDirection) => void
+  onOpenDetail?: (profileId: string) => void
   onRefresh?: () => void
 }
 
-export function SwipeDeck({ profiles, onSwipe, onRefresh }: SwipeDeckProps) {
+export function SwipeDeck({ profiles, onSwipe, onOpenDetail, onRefresh }: SwipeDeckProps) {
   if (profiles.length === 0) {
     return (
       <View style={styles.emptyContainer}>
@@ -53,6 +54,7 @@ export function SwipeDeck({ profiles, onSwipe, onRefresh }: SwipeDeckProps) {
               isTop={isTop}
               stackIndex={stackIndex}
               onSwipe={(direction) => onSwipe(profile.id, direction)}
+              onOpenDetail={() => onOpenDetail?.(profile.id)}
             />
           )
         })}

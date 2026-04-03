@@ -17,7 +17,7 @@ import { useAppContext } from '../../context/AppContext'
 
 const AnimatedView = Animated.View as React.ComponentType<React.ComponentProps<typeof View>>
 
-const { width: W, height: H } = Dimensions.get('window')
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window')
 const PAWS = ['🐾', '🐾', '💕', '🐾', '⭐', '🐾', '💕', '🐾', '🐾', '💕']
 
 function FloatingPaw({
@@ -29,7 +29,7 @@ function FloatingPaw({
   delay: number
   startX: number
 }) {
-  const translateY = useRef(new Animated.Value(H + 50)).current
+  const translateY = useRef(new Animated.Value(SCREEN_HEIGHT + 50)).current
   const opacity = useRef(new Animated.Value(0)).current
   const rotate = useRef(new Animated.Value(0)).current
 
@@ -46,7 +46,7 @@ function FloatingPaw({
           Animated.timing(rotate, { toValue: 1, duration: 3000, useNativeDriver: true }),
         ]),
         Animated.parallel([
-          Animated.timing(translateY, { toValue: H + 50, duration: 0, useNativeDriver: true }),
+          Animated.timing(translateY, { toValue: SCREEN_HEIGHT + 50, duration: 0, useNativeDriver: true }),
           Animated.timing(opacity, { toValue: 0, duration: 0, useNativeDriver: true }),
           Animated.timing(rotate, { toValue: 0, duration: 0, useNativeDriver: true }),
         ]),
@@ -109,7 +109,7 @@ export function MatchScreen() {
           key={i}
           emoji={emoji}
           delay={i * 300}
-          startX={(W / PAWS.length) * i + 10}
+          startX={(SCREEN_WIDTH / PAWS.length) * i + 10}
         />
       ))}
 
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   card: {
-    width: W - 48,
+    width: SCREEN_WIDTH - 48,
     backgroundColor: DS.cardBg,
     borderRadius: 28,
     paddingVertical: DS.space.xxxl,

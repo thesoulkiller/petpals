@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router'
 import { Text } from 'react-native'
+import { DS } from '../../theme'
 
 // Tab icon: use emoji to sidestep Tamagui icon color token constraints
 function DiscoverIcon({ focused }: { focused: boolean }) {
@@ -17,11 +18,11 @@ export default function TabsLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#FF6B9D',
-        tabBarInactiveTintColor: '#9B7FA6',
+        tabBarActiveTintColor: DS.primary,
+        tabBarInactiveTintColor: DS.muted,
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopColor: '#F0D6E8',
+          backgroundColor: DS.white,
+          borderTopColor: DS.cardBorder,
           borderTopWidth: 1,
           paddingBottom: 4,
           height: 60,

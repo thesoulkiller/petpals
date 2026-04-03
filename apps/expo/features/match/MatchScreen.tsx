@@ -5,17 +5,17 @@ import {
   Animated,
   Dimensions,
   Image,
-  SafeAreaView,
   StyleSheet,
   TouchableOpacity,
   View,
 } from 'react-native'
-
-const AnimatedView = Animated.View as React.ComponentType<React.ComponentProps<typeof View>>
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text, XStack, YStack } from 'tamagui'
 import { useRouter } from 'expo-router'
 import { bubblegumColors } from '@my/config'
 import { useAppContext } from '../../context/AppContext'
+
+const AnimatedView = Animated.View as React.ComponentType<React.ComponentProps<typeof View>>
 
 const { width: W, height: H } = Dimensions.get('window')
 const PAWS = ['🐾', '🐾', '💕', '🐾', '⭐', '🐾', '💕', '🐾', '🐾', '💕']
@@ -23,8 +23,7 @@ const PAWS = ['🐾', '🐾', '💕', '🐾', '⭐', '🐾', '💕', '🐾', '�
 function FloatingPaw({
   emoji,
   delay,
-  startX,
-}: {
+  startX }: {
   emoji: string
   delay: number
   startX: number
@@ -42,8 +41,7 @@ function FloatingPaw({
           Animated.timing(translateY, {
             toValue: -100,
             duration: 3000,
-            useNativeDriver: true,
-          }),
+            useNativeDriver: true }),
           Animated.sequence([
             Animated.timing(opacity, { toValue: 1, duration: 400, useNativeDriver: true }),
             Animated.timing(opacity, { toValue: 0, duration: 600, delay: 2000, useNativeDriver: true }),
@@ -51,8 +49,7 @@ function FloatingPaw({
           Animated.timing(rotate, {
             toValue: 1,
             duration: 3000,
-            useNativeDriver: true,
-          }),
+            useNativeDriver: true }),
         ]),
         Animated.parallel([
           Animated.timing(translateY, { toValue: H + 50, duration: 0, useNativeDriver: true }),
@@ -67,8 +64,7 @@ function FloatingPaw({
 
   const spin = rotate.interpolate({
     inputRange: [0, 1],
-    outputRange: ['0deg', '360deg'],
-  })
+    outputRange: ['0deg', '360deg'] })
 
   return (
     <AnimatedView
@@ -77,8 +73,7 @@ function FloatingPaw({
         {
           left: startX,
           transform: [{ translateY }, { rotate: spin }],
-          opacity,
-        },
+          opacity },
       ]}
     >
       <Text style={styles.pawEmoji}>{emoji}</Text>
@@ -100,13 +95,11 @@ export function MatchScreen() {
         toValue: 1,
         tension: 50,
         friction: 7,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true }),
       Animated.timing(opacity, {
         toValue: 1,
         duration: 300,
-        useNativeDriver: true,
-      }),
+        useNativeDriver: true }),
     ]).start()
   }, [])
 
@@ -215,14 +208,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'rgba(255, 107, 157, 0.92)',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   floatingPaw: {
-    position: 'absolute',
-  },
+    position: 'absolute' },
   pawEmoji: {
-    fontSize: 24,
-  },
+    fontSize: 24 },
   content: {
     width: W - 48,
     backgroundColor: 'white',
@@ -234,24 +224,20 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 12 },
     shadowOpacity: 0.3,
     shadowRadius: 24,
-    elevation: 16,
-  },
+    elevation: 16 },
   matchEmoji: {
-    fontSize: 48,
-  },
+    fontSize: 48 },
   matchTitle: {
     fontSize: 34,
     fontWeight: '900',
     color: bubblegumColors.primary,
-    letterSpacing: -0.5,
-  },
+    letterSpacing: -0.5 },
   matchSubtitle: {
     fontSize: 15,
     color: bubblegumColors.textMuted,
     textAlign: 'center',
     lineHeight: 22,
-    paddingHorizontal: 8,
-  },
+    paddingHorizontal: 8 },
   photoFrame: {
     borderRadius: 70,
     overflow: 'hidden',
@@ -261,33 +247,25 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.2,
     shadowRadius: 12,
-    elevation: 6,
-  },
+    elevation: 6 },
   photo: {
     width: 110,
     height: 110,
-    borderRadius: 55,
-  },
+    borderRadius: 55 },
   photoPlaceholder: {
     backgroundColor: bubblegumColors.backgroundMuted,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
+    justifyContent: 'center' },
   heartBetween: {
-    fontSize: 28,
-  },
+    fontSize: 28 },
   petNameLabel: {
     fontSize: 15,
     fontWeight: '700',
-    color: bubblegumColors.text,
-  },
+    color: bubblegumColors.text },
   skipButton: {
     alignItems: 'center',
-    paddingVertical: 12,
-  },
+    paddingVertical: 12 },
   skipText: {
     fontSize: 15,
     color: bubblegumColors.textMuted,
-    fontWeight: '600',
-  },
-})
+    fontWeight: '600' } })

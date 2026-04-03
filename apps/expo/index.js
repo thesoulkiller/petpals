@@ -6,6 +6,7 @@ if (typeof process !== 'undefined' && process.env && !process.env.EXPO_OS) {
   process.env.EXPO_OS = Platform.OS
 }
 
+import '@tamagui/native/setup-zeego'
 import { registerRootComponent } from 'expo'
 import { ExpoRoot } from 'expo-router'
 import React from 'react'

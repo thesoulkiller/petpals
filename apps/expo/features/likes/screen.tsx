@@ -2,12 +2,11 @@
 
 import React, { useState } from 'react'
 import {
-  SafeAreaView,
   StyleSheet,
   FlatList,
   Image,
-  TouchableOpacity,
-} from 'react-native'
+  TouchableOpacity } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text, XStack, YStack } from 'tamagui'
 import { Lock } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
@@ -19,8 +18,7 @@ function ProfileCard({
   profile,
   isMatch,
   isPremium,
-  onPress,
-}: {
+  onPress }: {
   profile: PetProfile
   isMatch: boolean
   isPremium: boolean
@@ -183,15 +181,12 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.06,
     shadowRadius: 8,
-    elevation: 3,
-  },
+    elevation: 3 },
   cardPhoto: {
     width: '100%',
-    aspectRatio: 0.85,
-  },
+    aspectRatio: 0.85 },
   blurredPhoto: {
-    opacity: 0.7,
-  },
+    opacity: 0.7 },
   lockOverlay: {
     position: 'absolute',
     top: 0,
@@ -200,8 +195,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 4,
-  },
+    gap: 4 },
   matchBadge: {
     position: 'absolute',
     top: 8,
@@ -209,15 +203,11 @@ const styles = StyleSheet.create({
     backgroundColor: bubblegumColors.primary,
     borderRadius: 8,
     paddingHorizontal: 6,
-    paddingVertical: 3,
-  },
+    paddingVertical: 3 },
   tab: {
     paddingVertical: 8,
     paddingHorizontal: 4,
     borderBottomWidth: 2,
-    borderBottomColor: 'transparent',
-  },
+    borderBottomColor: 'transparent' },
   tabActive: {
-    borderBottomColor: bubblegumColors.primary,
-  },
-})
+    borderBottomColor: bubblegumColors.primary } })

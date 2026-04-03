@@ -1,7 +1,8 @@
 'use client'
 
 import React from 'react'
-import { SafeAreaView, StyleSheet } from 'react-native'
+import { StyleSheet } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text, YStack } from 'tamagui'
 import { useRouter } from 'expo-router'
 import Svg, { Circle, Path } from 'react-native-svg'

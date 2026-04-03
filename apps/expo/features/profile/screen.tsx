@@ -2,15 +2,14 @@
 
 import React, { useState } from 'react'
 import {
-  SafeAreaView,
   StyleSheet,
   Image,
   ScrollView,
   TouchableOpacity,
-  Alert,
-} from 'react-native'
+  Alert } from 'react-native'
 import { Button, Text, XStack, YStack } from 'tamagui'
 import { TextInput } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Edit3, Star, Crown, Heart } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
 import { bubblegumColors } from '@my/config'
@@ -271,11 +270,9 @@ export function ProfileScreen() {
                       location: null,
                       onboardingComplete: false,
                       superlikes: 3,
-                      isPremium: false,
-                    })
+                      isPremium: false })
                     router.replace('/onboarding')
-                  },
-                },
+                  } },
               ])
             }}
             backgroundColor="transparent"
@@ -306,13 +303,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     backgroundColor: bubblegumColors.background,
-    fontWeight: '600',
-  },
+    fontWeight: '600' },
   profilePhoto: {
     width: 140,
     height: 140,
     borderRadius: 70,
     borderWidth: 4,
-    borderColor: bubblegumColors.primaryLight,
-  },
-})
+    borderColor: bubblegumColors.primaryLight } })

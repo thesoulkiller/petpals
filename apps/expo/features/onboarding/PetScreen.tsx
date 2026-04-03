@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState } from 'react'
-import { SafeAreaView, StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, TextInput } from 'react-native'
+import { StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, TextInput } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text, XStack, YStack } from 'tamagui'
 import { Minus, Plus } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'

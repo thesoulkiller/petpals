@@ -1,7 +1,8 @@
 'use client'
 
 import React, { useState } from 'react'
-import { SafeAreaView, StyleSheet, KeyboardAvoidingView, Platform, TextInput } from 'react-native'
+import { StyleSheet, KeyboardAvoidingView, Platform, TextInput } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text, YStack } from 'tamagui'
 import { useRouter } from 'expo-router'
 import { bubblegumColors } from '@my/config'

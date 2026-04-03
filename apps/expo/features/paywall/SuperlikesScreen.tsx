@@ -1,7 +1,8 @@
 'use client'
 
 import React from 'react'
-import { SafeAreaView, StyleSheet, Alert } from 'react-native'
+import { StyleSheet, Alert } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { Button, Text, XStack, YStack } from 'tamagui'
 import { ChevronLeft, Star } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'

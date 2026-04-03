@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
     marginBottom: DS.space.sm,
   },
   emptyTitle: {
-    ...DS.text_title,
+    ...DS.textTitle,
     fontFamily: DS.font.display,
     color: DS.text,
     textAlign: 'center',
   },
   emptySubtitle: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
     textAlign: 'center',
     lineHeight: 22,
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     marginTop: DS.space.sm,
   },
   refreshText: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.white,
     fontWeight: '700',
   },

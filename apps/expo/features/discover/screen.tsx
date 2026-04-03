@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   superlikeCount: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.white,
     fontWeight: '700',
   },
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   premiumBannerText: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.primary,
     fontWeight: '700',
   },

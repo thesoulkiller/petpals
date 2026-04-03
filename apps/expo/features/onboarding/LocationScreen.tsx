@@ -134,13 +134,13 @@ const styles = StyleSheet.create({
   },
   textBlock: { gap: DS.space.sm, alignItems: 'center' },
   title: {
-    ...DS.text_hero,
+    ...DS.textHero,
     fontFamily: DS.font.display,
     color: DS.text,
     textAlign: 'center',
   },
   subtitle: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
     lineHeight: 24,
     textAlign: 'center',
@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
     paddingVertical: DS.space.md,
   },
   featureText: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.text,
     fontWeight: '600',
   },
@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     backgroundColor: DS.cardBorder,
   },
   ctaText: {
-    ...DS.text_section,
+    ...DS.textSection,
     fontFamily: DS.font.display,
     color: DS.white,
     fontSize: 17,
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     paddingVertical: DS.space.md,
   },
   skipText: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
     fontWeight: '600',
   },

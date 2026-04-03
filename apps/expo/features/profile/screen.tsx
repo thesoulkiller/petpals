@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerName: {
-    ...DS.text_section,
+    ...DS.textSection,
     fontFamily: DS.font.display,
     color: DS.white,
     letterSpacing: -0.2,
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     fontFamily: DS.font.display,
   },
   petBreed: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.primary,
     fontWeight: '600',
     marginTop: -2,
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     color: DS.text,
   },
   superlikeSub: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.muted,
     marginTop: 2,
   },
@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
     marginTop: DS.space.sm,
   },
   resetText: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.muted,
   },
 })

@@ -48,12 +48,12 @@ export const DS = {
   },
 
   // Scale
-  text_hero:    { fontSize: 32, fontWeight: '700' as const, letterSpacing: -0.5 },
-  text_title:   { fontSize: 24, fontWeight: '700' as const },
-  text_section: { fontSize: 18, fontWeight: '700' as const },
-  text_body:    { fontSize: 15, fontWeight: '400' as const },
-  text_caption: { fontSize: 13, fontWeight: '500' as const },
-  text_micro:   { fontSize: 11, fontWeight: '600' as const },
+  textHero:    { fontSize: 32, fontWeight: '700' as const, letterSpacing: -0.5 },
+  textTitle:   { fontSize: 24, fontWeight: '700' as const },
+  textSection: { fontSize: 18, fontWeight: '700' as const },
+  textBody:    { fontSize: 15, fontWeight: '400' as const },
+  textCaption: { fontSize: 13, fontWeight: '500' as const },
+  textMicro:   { fontSize: 11, fontWeight: '600' as const },
 
   // ─── Spacing (8px base) ──────────────────────────────────────────────────
   space: {

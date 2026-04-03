@@ -219,13 +219,13 @@ const styles = StyleSheet.create({
     fontSize: 48,
   },
   matchTitle: {
-    ...DS.text_hero,
+    ...DS.textHero,
     fontFamily: DS.font.display,
     color: DS.primary,
     letterSpacing: -0.5,
   },
   matchSub: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
     textAlign: 'center',
     lineHeight: 22,
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: DS.space.base,
   },
   petLabel: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     fontWeight: '700',
     color: DS.text,
   },
@@ -285,7 +285,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   woofText: {
-    ...DS.text_section,
+    ...DS.textSection,
     fontFamily: DS.font.display,
     color: DS.white,
     fontSize: 17,
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
     paddingVertical: DS.space.md,
   },
   skipText: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
     fontWeight: '600',
   },

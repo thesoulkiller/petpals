@@ -92,14 +92,14 @@ const styles = StyleSheet.create({
     gap: DS.space.md,
   },
   heroTitle: {
-    ...DS.text_hero,
+    ...DS.textHero,
     fontSize: 52,
     fontFamily: DS.font.display,
     color: DS.onGradient,
     letterSpacing: -1,
   },
   heroSub: {
-    ...DS.text_body,
+    ...DS.textBody,
     fontSize: 17,
     color: 'rgba(255,255,255,0.88)',
     lineHeight: 26,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   featureText: {
-    ...DS.text_body,
+    ...DS.textBody,
     fontFamily: DS.font.body,
     color: DS.onGradient,
     fontSize: 15,
@@ -143,13 +143,13 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   ctaText: {
-    ...DS.text_section,
+    ...DS.textSection,
     fontFamily: DS.font.display,
     color: DS.ctaText,
     fontSize: 18,
   },
   ctaSub: {
-    ...DS.text_micro,
+    ...DS.textMicro,
     color: 'rgba(255,255,255,0.65)',
     textAlign: 'center',
   },

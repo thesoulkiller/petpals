@@ -81,12 +81,12 @@ const styles = StyleSheet.create({
   },
   textBlock: { gap: DS.space.sm },
   title: {
-    ...DS.text_hero,
+    ...DS.textHero,
     fontFamily: DS.font.display,
     color: DS.text,
   },
   subtitle: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
     lineHeight: 22,
   },
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     backgroundColor: DS.cardBorder,
   },
   ctaText: {
-    ...DS.text_section,
+    ...DS.textSection,
     fontFamily: DS.font.display,
     color: DS.white,
     fontSize: 17,

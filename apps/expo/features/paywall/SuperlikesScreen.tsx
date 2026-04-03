@@ -1,4 +1,4 @@
-'use client'
+
 
 import React from 'react'
 import { StyleSheet, Alert, View, ScrollView, TouchableOpacity } from 'react-native'
@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   navTitle: {
-    ...DS.text_section,
+    ...DS.textSection,
     fontFamily: DS.font.display,
     color: DS.text,
     flex: 1,
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     ...DS.shadow.card,
   },
   balanceLabel: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.muted,
     fontWeight: '600',
   },
@@ -186,17 +186,17 @@ const styles = StyleSheet.create({
     color: DS.text,
   },
   balanceUnit: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
   },
   explainBlock: { gap: DS.space.sm },
   explainTitle: {
-    ...DS.text_section,
+    ...DS.textSection,
     fontFamily: DS.font.display,
     color: DS.text,
   },
   explainBody: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
     lineHeight: 22,
   },
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
     color: '#C8960A', // dark gold to pair with white button on superlike background
   },
   legal: {
-    ...DS.text_micro,
+    ...DS.textMicro,
     color: DS.muted,
     textAlign: 'center',
     paddingHorizontal: DS.space.xl,

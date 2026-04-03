@@ -1,4 +1,4 @@
-'use client'
+
 
 import React, { useState } from 'react'
 import { StyleSheet, FlatList, Image, TouchableOpacity, View } from 'react-native'
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     paddingBottom: DS.space.sm,
   },
   heading: {
-    ...DS.text_title,
+    ...DS.textTitle,
     fontFamily: DS.font.display,
     color: DS.text,
   },
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     borderBottomColor: DS.primary,
   },
   tabLabel: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     fontWeight: '700',
     color: DS.muted,
   },
@@ -205,7 +205,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   premiumBannerText: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     fontWeight: '700',
     color: DS.primary,
   },
@@ -271,7 +271,7 @@ const styles = StyleSheet.create({
     gap: 2,
   },
   cardName: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     fontWeight: '700',
     color: DS.text,
   },
@@ -291,13 +291,13 @@ const styles = StyleSheet.create({
     fontSize: 48,
   },
   emptyTitle: {
-    ...DS.text_title,
+    ...DS.textTitle,
     fontFamily: DS.font.display,
     color: DS.text,
     textAlign: 'center',
   },
   emptyBody: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
     textAlign: 'center',
     lineHeight: 22,
@@ -308,7 +308,7 @@ const styles = StyleSheet.create({
     gap: DS.space.sm,
   },
   emptyListText: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
     textAlign: 'center',
   },

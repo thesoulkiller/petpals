@@ -1,4 +1,4 @@
-'use client'
+
 
 import React, { useEffect } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
@@ -19,7 +19,7 @@ export function DiscoverScreen() {
     if (pendingMatch) {
       router.push('/match')
     }
-  }, [pendingMatch])
+  }, [pendingMatch, router])
 
   function handleSwipe(profileId: string, direction: SwipeDirection) {
     swipe(profileId, direction)
@@ -160,7 +160,7 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
   superlikeCount: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.white,
     fontWeight: '700',
   },
@@ -176,7 +176,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   premiumBannerText: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.primary,
     fontWeight: '700',
   },

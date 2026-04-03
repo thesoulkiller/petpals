@@ -1,4 +1,4 @@
-'use client'
+
 
 import React, { useState } from 'react'
 import { StyleSheet, Image, ScrollView, TouchableOpacity, Alert, View, TextInput } from 'react-native'
@@ -26,7 +26,7 @@ export function ProfileScreen() {
     setEditingName(false)
   }
 
-  const hasPet = user.pet !== null
+  const pet = user.pet
 
   return (
     <SafeAreaView style={styles.safe}>
@@ -43,9 +43,9 @@ export function ProfileScreen() {
         >
           <Text style={styles.headerWatermark}>🐾</Text>
 
-          {hasPet && user.pet!.photos.length > 0 ? (
+          {pet && pet.photos.length > 0 ? (
             <Image
-              source={{ uri: user.pet!.photos[0] }}
+              source={{ uri: pet.photos[0] }}
               style={styles.avatar}
               resizeMode="cover"
             />
@@ -118,15 +118,15 @@ export function ProfileScreen() {
           </View>
 
           {/* Pet info card */}
-          {hasPet && (
+          {pet && (
             <View style={styles.card}>
               <Text style={styles.cardLabel}>My Pet</Text>
-              <Text style={styles.petName}>{user.pet!.name}</Text>
+              <Text style={styles.petName}>{pet.name}</Text>
               <Text style={styles.petBreed}>
-                {user.pet!.breed} · {user.pet!.age}yo
+                {pet.breed} · {pet.age}yo
               </Text>
               <View style={styles.tagsRow}>
-                {user.pet!.tags.map((tag) => (
+                {pet.tags.map((tag) => (
                   <View key={tag.id} style={styles.tag}>
                     <Text style={styles.tagText}>{tag.emoji} {tag.label}</Text>
                   </View>
@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   headerName: {
-    ...DS.text_section,
+    ...DS.textSection,
     fontFamily: DS.font.display,
     color: DS.white,
     letterSpacing: -0.2,
@@ -349,7 +349,7 @@ const styles = StyleSheet.create({
     fontFamily: DS.font.display,
   },
   petBreed: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.primary,
     fontWeight: '600',
     marginTop: -2,
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     color: DS.text,
   },
   superlikeSub: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.muted,
     marginTop: 2,
   },
@@ -422,7 +422,7 @@ const styles = StyleSheet.create({
     marginTop: DS.space.sm,
   },
   resetText: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.muted,
   },
 })

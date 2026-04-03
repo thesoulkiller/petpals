@@ -1,4 +1,4 @@
-'use client'
+
 
 import React, { useRef } from 'react'
 import {
@@ -26,7 +26,6 @@ interface SwipeCardProps {
   onSwipe: (direction: SwipeDirection) => void
   isTop: boolean
   stackIndex: number
-  key?: React.Key
 }
 
 export function SwipeCard({ profile, onSwipe, isTop, stackIndex }: SwipeCardProps) {
@@ -302,12 +301,12 @@ const styles = StyleSheet.create({
     letterSpacing: -0.3,
   },
   distance: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.muted,
     fontWeight: '600',
   },
   breed: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.primary,
     fontWeight: '600',
     marginTop: 2,
@@ -336,7 +335,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   description: {
-    ...DS.text_caption,
+    ...DS.textCaption,
     color: DS.muted,
     lineHeight: 18,
   },

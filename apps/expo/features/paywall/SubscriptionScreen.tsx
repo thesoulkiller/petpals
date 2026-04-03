@@ -1,4 +1,4 @@
-'use client'
+
 
 import React from 'react'
 import { StyleSheet, Alert, ScrollView, View, TouchableOpacity } from 'react-native'
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   navTitle: {
-    ...DS.text_section,
+    ...DS.textSection,
     fontFamily: DS.font.display,
     color: DS.text,
     flex: 1,
@@ -192,13 +192,13 @@ const styles = StyleSheet.create({
     gap: DS.space.sm,
   },
   heroTitle: {
-    ...DS.text_title,
+    ...DS.textTitle,
     fontFamily: DS.font.display,
     color: DS.text,
     textAlign: 'center',
   },
   heroSubtitle: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.muted,
     textAlign: 'center',
     lineHeight: 22,
@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     gap: DS.space.sm,
   },
   featureText: {
-    ...DS.text_body,
+    ...DS.textBody,
     color: DS.text,
     flex: 1,
   },
@@ -286,7 +286,7 @@ const styles = StyleSheet.create({
     color: DS.primary,
   },
   legal: {
-    ...DS.text_micro,
+    ...DS.textMicro,
     color: DS.muted,
     textAlign: 'center',
     paddingHorizontal: DS.space.xl,

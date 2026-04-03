@@ -1,21 +1,20 @@
 'use client'
 
 import React, { useEffect } from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Text, XStack, YStack } from 'tamagui'
+import { Text } from 'tamagui'
 import { Heart, Star, X } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
-import { bubblegumColors } from '@my/config'
+import { DS } from '../../theme'
 import { useAppContext } from '../../context/AppContext'
 import { SwipeDeck } from './SwipeDeck'
 import type { SwipeDirection } from '../../types/petpals'
 
 export function DiscoverScreen() {
   const router = useRouter()
-  const { remainingProfiles, swipe, user, pendingMatch, clearMatch } = useAppContext()
+  const { remainingProfiles, swipe, user, pendingMatch } = useAppContext()
 
-  // Navigate to match modal when a match occurs
   useEffect(() => {
     if (pendingMatch) {
       router.push('/match')
@@ -27,142 +26,203 @@ export function DiscoverScreen() {
   }
 
   function handleDislike() {
-    if (remainingProfiles[0]) {
-      swipe(remainingProfiles[0].id, 'left')
-    }
+    if (remainingProfiles[0]) swipe(remainingProfiles[0].id, 'left')
   }
 
   function handleLike() {
-    if (remainingProfiles[0]) {
-      swipe(remainingProfiles[0].id, 'right')
-    }
+    if (remainingProfiles[0]) swipe(remainingProfiles[0].id, 'right')
   }
 
   function handleSuperlike() {
-    if (remainingProfiles[0]) {
-      if (user.superlikes <= 0) {
-        router.push('/paywall/superlikes')
-        return
-      }
-      swipe(remainingProfiles[0].id, 'up')
+    if (!remainingProfiles[0]) return
+    if (user.superlikes <= 0) {
+      router.push('/paywall/superlikes')
+      return
     }
+    swipe(remainingProfiles[0].id, 'up')
   }
 
   return (
     <SafeAreaView style={styles.safe}>
-      <YStack flex={1} backgroundColor={bubblegumColors.background}>
+      <View style={styles.container}>
         {/* Header */}
-        <XStack
-          paddingHorizontal="$4"
-          paddingTop="$3"
-          paddingBottom="$2"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <Text fontSize={26} fontWeight="900" color={bubblegumColors.primary}>
-            🐾 PetPals
-          </Text>
+        <View style={styles.header}>
+          <Text style={styles.logo}>🐾 PetPals</Text>
 
-          <XStack alignItems="center" gap="$2">
-            <YStack
-              backgroundColor={user.superlikes > 0 ? bubblegumColors.warning : bubblegumColors.border}
-              borderRadius={20}
-              paddingHorizontal="$3"
-              paddingVertical="$1"
-              flexDirection="row"
-              alignItems="center"
-              gap="$1"
-            >
-              <Text fontSize={14}>⭐</Text>
-              <Text
-                fontSize={13}
-                fontWeight="700"
-                color={user.superlikes > 0 ? bubblegumColors.text : bubblegumColors.textMuted}
-              >
-                {user.superlikes}
-              </Text>
-            </YStack>
-          </XStack>
-        </XStack>
+          {/* Superlike badge */}
+          <View style={[styles.superlikeBadge, user.superlikes <= 0 && styles.superlikeBadgeEmpty]}>
+            <Text style={styles.superlikeEmoji}>⭐</Text>
+            <Text style={[styles.superlikeCount, user.superlikes <= 0 && styles.superlikeCountEmpty]}>
+              {user.superlikes}
+            </Text>
+          </View>
+        </View>
 
-        {/* Premium nudge banner */}
+        {/* Premium nudge */}
         {!user.isPremium && remainingProfiles.length < 5 && remainingProfiles.length > 0 && (
-          <Button
+          <TouchableOpacity
+            style={styles.premiumBanner}
             onPress={() => router.push('/paywall/subscription')}
-            backgroundColor={bubblegumColors.primaryLight}
-            borderRadius={0}
-            height={40}
-            pressStyle={{ opacity: 0.9 }}
+            activeOpacity={0.88}
           >
-            <Text fontSize={13} color={bubblegumColors.primaryDark} fontWeight="700">
+            <Text style={styles.premiumBannerText}>
               💎 Go Premium — unlimited swipes & more
             </Text>
-          </Button>
+          </TouchableOpacity>
         )}
 
         {/* Swipe deck */}
-        <YStack flex={1} paddingHorizontal={16} paddingTop={8}>
+        <View style={styles.deckArea}>
           <SwipeDeck
             profiles={remainingProfiles}
             onSwipe={handleSwipe}
-            onRefresh={() => {/* stub: profiles are static */}}
+            onRefresh={() => {}}
           />
-        </YStack>
+        </View>
 
         {/* Action buttons */}
         {remainingProfiles.length > 0 && (
-          <XStack
-            paddingHorizontal="$8"
-            paddingBottom="$4"
-            paddingTop="$2"
-            justifyContent="center"
-            alignItems="center"
-            gap="$5"
-          >
+          <View style={styles.actions}>
             {/* Dislike */}
-            <Button
+            <TouchableOpacity
+              style={[styles.actionBtn, styles.actionBtnLg, styles.actionBtnDislike]}
               onPress={handleDislike}
-              width={60}
-              height={60}
-              borderRadius={30}
-              backgroundColor={bubblegumColors.backgroundCard}
-              borderWidth={2}
-              borderColor={bubblegumColors.error}
-              pressStyle={{ scale: 0.93, backgroundColor: '#FFE8E8' }}
-              padding={0}
-              icon={<X color={bubblegumColors.error} size={26} />}
-            />
+              activeOpacity={0.85}
+            >
+              <X color={DS.error} size={28} />
+            </TouchableOpacity>
 
             {/* Superlike */}
-            <Button
+            <TouchableOpacity
+              style={[
+                styles.actionBtn,
+                styles.actionBtnSm,
+                user.superlikes > 0 ? styles.actionBtnSuper : styles.actionBtnSuperEmpty,
+              ]}
               onPress={handleSuperlike}
-              width={52}
-              height={52}
-              borderRadius={26}
-              backgroundColor={user.superlikes > 0 ? bubblegumColors.warning : bubblegumColors.border}
-              pressStyle={{ scale: 0.93 }}
-              padding={0}
-              icon={<Star color="white" size={22} />}
-            />
+              activeOpacity={0.85}
+            >
+              <Star color="white" size={22} />
+            </TouchableOpacity>
 
             {/* Like */}
-            <Button
+            <TouchableOpacity
+              style={[styles.actionBtn, styles.actionBtnLg, styles.actionBtnLike]}
               onPress={handleLike}
-              width={60}
-              height={60}
-              borderRadius={30}
-              backgroundColor={bubblegumColors.primary}
-              pressStyle={{ scale: 0.93, opacity: 0.85 }}
-              padding={0}
-              icon={<Heart color="white" size={26} />}
-            />
-          </XStack>
+              activeOpacity={0.85}
+            >
+              <Heart color="white" size={28} />
+            </TouchableOpacity>
+          </View>
         )}
-      </YStack>
+      </View>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: bubblegumColors.background },
+  safe: {
+    flex: 1,
+    backgroundColor: DS.surface,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: DS.surface,
+  },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: DS.space.base,
+    paddingTop: DS.space.md,
+    paddingBottom: DS.space.sm,
+  },
+  logo: {
+    fontSize: 24,
+    fontWeight: '900',
+    color: DS.primary,
+    fontFamily: DS.font.display,
+    letterSpacing: -0.3,
+  },
+  superlikeBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: DS.superlike,
+    borderRadius: DS.radius.pill,
+    paddingHorizontal: DS.space.md,
+    paddingVertical: DS.space.xs,
+  },
+  superlikeBadgeEmpty: {
+    backgroundColor: DS.cardBorder,
+  },
+  superlikeEmoji: {
+    fontSize: 13,
+  },
+  superlikeCount: {
+    ...DS.text_caption,
+    color: DS.white,
+    fontWeight: '700',
+  },
+  superlikeCountEmpty: {
+    color: DS.muted,
+  },
+  premiumBanner: {
+    backgroundColor: 'rgba(255,107,157,0.10)',
+    borderBottomWidth: 1,
+    borderBottomColor: DS.cardBorder,
+    paddingVertical: DS.space.sm,
+    paddingHorizontal: DS.space.base,
+    alignItems: 'center',
+  },
+  premiumBannerText: {
+    ...DS.text_caption,
+    color: DS.primary,
+    fontWeight: '700',
+  },
+  deckArea: {
+    flex: 1,
+    paddingHorizontal: DS.space.base,
+    paddingTop: DS.space.sm,
+  },
+  actions: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: DS.space.xl,
+    paddingHorizontal: DS.space.xxxl,
+    paddingBottom: DS.space.xl,
+    paddingTop: DS.space.sm,
+  },
+  actionBtn: {
+    borderRadius: DS.radius.pill,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: DS.white,
+    ...DS.shadow.card,
+  },
+  actionBtnLg: {
+    width: 64,
+    height: 64,
+  },
+  actionBtnSm: {
+    width: 52,
+    height: 52,
+  },
+  actionBtnDislike: {
+    borderWidth: 2,
+    borderColor: DS.error,
+  },
+  actionBtnLike: {
+    backgroundColor: DS.primary,
+    borderWidth: 0,
+  },
+  actionBtnSuper: {
+    backgroundColor: DS.superlike,
+    borderWidth: 0,
+  },
+  actionBtnSuperEmpty: {
+    backgroundColor: DS.cardBorder,
+    borderWidth: 0,
+  },
 })

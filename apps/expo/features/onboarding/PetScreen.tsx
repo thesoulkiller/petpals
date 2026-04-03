@@ -1,12 +1,20 @@
 'use client'
 
 import React, { useState } from 'react'
-import { StyleSheet, KeyboardAvoidingView, Platform, ScrollView, TouchableOpacity, TextInput } from 'react-native'
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  TouchableOpacity,
+  TextInput,
+  View,
+} from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Text, XStack, YStack } from 'tamagui'
+import { Text } from 'tamagui'
 import { Minus, Plus } from '@tamagui/lucide-icons'
 import { useRouter } from 'expo-router'
-import { bubblegumColors } from '@my/config'
+import { DS } from '../../theme'
 import { useAppContext } from '../../context/AppContext'
 import { OnboardingProgress } from './OnboardingProgress'
 import { AVAILABLE_TAGS } from '../../types/petpals'
@@ -54,94 +62,75 @@ export function PetScreen() {
         style={styles.flex}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
       >
-        <YStack flex={1} backgroundColor={bubblegumColors.background}>
+        <View style={styles.container}>
           <OnboardingProgress step={2} total={4} />
 
           <ScrollView
             contentContainerStyle={styles.scroll}
             keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
           >
-            <YStack gap="$5" paddingHorizontal={24} paddingTop={40}>
-              <YStack gap="$2">
-                <Text fontSize={28} fontWeight="900" color={bubblegumColors.text}>
-                  Tell us about your pet 🐾
-                </Text>
-                <Text fontSize={15} color={bubblegumColors.textMuted} lineHeight={22}>
-                  Help other pets get to know yours!
-                </Text>
-              </YStack>
+            <View style={styles.body}>
+              <View style={styles.textBlock}>
+                <Text style={styles.title}>Tell us about your pet 🐾</Text>
+                <Text style={styles.subtitle}>Help other pets get to know yours!</Text>
+              </View>
 
-              {/* Pet Name */}
-              <YStack gap="$2">
-                <Text fontSize={13} fontWeight="700" color={bubblegumColors.textMuted} textTransform="uppercase" letterSpacing={1}>
-                  Pet Name
-                </Text>
+              {/* Pet name */}
+              <View style={styles.field}>
+                <Text style={styles.fieldLabel}>Pet Name</Text>
                 <TextInput
                   value={petName}
                   onChangeText={setPetName}
                   placeholder="e.g. Biscuit"
-                  placeholderTextColor={bubblegumColors.textLight}
-                  style={[
-                    styles.input,
-                    { borderColor: petName.length >= 2 ? bubblegumColors.primary : bubblegumColors.border },
-                  ]}
+                  placeholderTextColor={DS.muted}
+                  style={[styles.input, petName.length >= 2 && styles.inputValid]}
                   autoCapitalize="words"
                 />
-              </YStack>
+              </View>
 
               {/* Breed */}
-              <YStack gap="$2">
-                <Text fontSize={13} fontWeight="700" color={bubblegumColors.textMuted} textTransform="uppercase" letterSpacing={1}>
-                  Breed
-                </Text>
+              <View style={styles.field}>
+                <Text style={styles.fieldLabel}>Breed</Text>
                 <TextInput
                   value={breed}
                   onChangeText={setBreed}
                   placeholder="e.g. Golden Retriever"
-                  placeholderTextColor={bubblegumColors.textLight}
-                  style={[
-                    styles.input,
-                    { borderColor: breed.length >= 2 ? bubblegumColors.primary : bubblegumColors.border },
-                  ]}
+                  placeholderTextColor={DS.muted}
+                  style={[styles.input, breed.length >= 2 && styles.inputValid]}
                   autoCapitalize="words"
                 />
-              </YStack>
+              </View>
 
               {/* Age */}
-              <YStack gap="$2">
-                <Text fontSize={13} fontWeight="700" color={bubblegumColors.textMuted} textTransform="uppercase" letterSpacing={1}>
-                  Age (years)
-                </Text>
-                <XStack alignItems="center" gap="$4">
+              <View style={styles.field}>
+                <Text style={styles.fieldLabel}>Age (years)</Text>
+                <View style={styles.ageRow}>
                   <TouchableOpacity
                     onPress={() => setAge((a) => Math.max(0, a - 1))}
-                    style={styles.ageButton}
+                    style={styles.ageBtn}
+                    activeOpacity={0.75}
                   >
-                    <Minus color={bubblegumColors.primary} size={20} />
+                    <Minus color={DS.primary} size={20} />
                   </TouchableOpacity>
-                  <Text fontSize={26} fontWeight="800" color={bubblegumColors.text} width={40} textAlign="center">
-                    {age}
-                  </Text>
+                  <Text style={styles.ageValue}>{age}</Text>
                   <TouchableOpacity
                     onPress={() => setAge((a) => Math.min(25, a + 1))}
-                    style={styles.ageButton}
+                    style={styles.ageBtn}
+                    activeOpacity={0.75}
                   >
-                    <Plus color={bubblegumColors.primary} size={20} />
+                    <Plus color={DS.primary} size={20} />
                   </TouchableOpacity>
-                  <Text fontSize={14} color={bubblegumColors.textMuted}>
-                    {age === 1 ? 'year old' : 'years old'}
-                  </Text>
-                </XStack>
-              </YStack>
+                  <Text style={styles.ageUnit}>{age === 1 ? 'year old' : 'years old'}</Text>
+                </View>
+              </View>
 
-              {/* Tags */}
-              <YStack gap="$3">
-                <Text fontSize={13} fontWeight="700" color={bubblegumColors.textMuted} textTransform="uppercase" letterSpacing={1}>
-                  Personality (pick up to 4)
-                </Text>
-                <XStack flexWrap="wrap" gap="$2">
+              {/* Personality tags */}
+              <View style={styles.field}>
+                <Text style={styles.fieldLabel}>Personality (up to 4)</Text>
+                <View style={styles.tagsWrap}>
                   {AVAILABLE_TAGS.map((tag) => {
-                    const isSelected = selectedTags.find((t) => t.id === tag.id)
+                    const isSelected = !!selectedTags.find((t) => t.id === tag.id)
                     const disabled = !isSelected && selectedTags.length >= 4
                     return (
                       <TouchableOpacity
@@ -149,90 +138,148 @@ export function PetScreen() {
                         onPress={() => !disabled && toggleTag(tag)}
                         style={[
                           styles.tagChip,
-                          isSelected ? styles.tagChipSelected : null,
-                          disabled ? styles.tagChipDisabled : null,
+                          isSelected && styles.tagChipSelected,
+                          disabled && styles.tagChipDisabled,
                         ]}
+                        activeOpacity={0.75}
                       >
-                        <Text
-                          style={[
-                            styles.tagChipText,
-                            isSelected ? styles.tagChipTextSelected : null,
-                          ]}
-                        >
+                        <Text style={[styles.tagText, isSelected && styles.tagTextSelected]}>
                           {tag.emoji} {tag.label}
                         </Text>
                       </TouchableOpacity>
                     )
                   })}
-                </XStack>
-              </YStack>
+                </View>
+              </View>
 
-              <YStack paddingBottom={32}>
-                <Button
-                  onPress={handleContinue}
-                  disabled={!isValid}
-                  backgroundColor={isValid ? bubblegumColors.primary : bubblegumColors.border}
-                  borderRadius={30}
-                  height={56}
-                  pressStyle={{ opacity: 0.88, scale: 0.98 }}
-                >
-                  <Text color="white" fontWeight="800" fontSize={17}>
-                    Continue →
-                  </Text>
-                </Button>
-              </YStack>
-            </YStack>
+              <TouchableOpacity
+                onPress={handleContinue}
+                style={[styles.ctaBtn, !isValid && styles.ctaBtnDisabled]}
+                disabled={!isValid}
+                activeOpacity={0.88}
+              >
+                <Text style={styles.ctaText}>Continue →</Text>
+              </TouchableOpacity>
+            </View>
           </ScrollView>
-        </YStack>
+        </View>
       </KeyboardAvoidingView>
     </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
-  safe: { flex: 1, backgroundColor: bubblegumColors.background },
+  safe: { flex: 1, backgroundColor: DS.surface },
   flex: { flex: 1 },
-  scroll: { paddingBottom: 40 },
+  container: { flex: 1, backgroundColor: DS.surface },
+  scroll: { paddingBottom: DS.space.xxxl },
+  body: {
+    paddingHorizontal: DS.space.xl,
+    paddingTop: DS.space.xxxl,
+    gap: DS.space.xl,
+  },
+  textBlock: { gap: DS.space.sm },
+  title: {
+    ...DS.text_hero,
+    fontFamily: DS.font.display,
+    color: DS.text,
+  },
+  subtitle: {
+    ...DS.text_body,
+    color: DS.muted,
+    lineHeight: 22,
+  },
+  field: { gap: DS.space.sm },
+  fieldLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: DS.muted,
+    textTransform: 'uppercase',
+    letterSpacing: 1,
+  },
   input: {
-    backgroundColor: bubblegumColors.backgroundCard,
+    backgroundColor: DS.cardBg,
     borderWidth: 2,
-    borderRadius: 16,
+    borderColor: DS.cardBorder,
+    borderRadius: DS.radius.md,
     fontSize: 17,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    color: bubblegumColors.text,
+    paddingHorizontal: DS.space.base,
+    paddingVertical: DS.space.md,
+    color: DS.text,
     fontWeight: '600',
   },
-  ageButton: {
+  inputValid: {
+    borderColor: DS.primary,
+  },
+  ageRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DS.space.base,
+  },
+  ageBtn: {
     width: 44,
     height: 44,
-    borderRadius: 22,
-    backgroundColor: bubblegumColors.backgroundMuted,
+    borderRadius: DS.radius.pill,
+    backgroundColor: DS.surface,
+    borderWidth: 1.5,
+    borderColor: DS.cardBorder,
     alignItems: 'center',
     justifyContent: 'center',
   },
+  ageValue: {
+    fontSize: 26,
+    fontWeight: '800',
+    color: DS.text,
+    width: 40,
+    textAlign: 'center',
+  },
+  ageUnit: {
+    ...DS.text_body,
+    color: DS.muted,
+  },
+  tagsWrap: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: DS.space.sm,
+  },
   tagChip: {
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: bubblegumColors.backgroundCard,
-    borderWidth: 2,
-    borderColor: bubblegumColors.border,
-    marginBottom: 4,
+    paddingHorizontal: DS.space.md,
+    paddingVertical: DS.space.sm,
+    borderRadius: DS.radius.pill,
+    backgroundColor: DS.cardBg,
+    borderWidth: 1.5,
+    borderColor: DS.cardBorder,
   },
   tagChipSelected: {
-    backgroundColor: bubblegumColors.primaryLight,
-    borderColor: bubblegumColors.primary,
+    backgroundColor: 'rgba(255,107,157,0.10)',
+    borderColor: DS.primary,
   },
   tagChipDisabled: {
     opacity: 0.4,
   },
-  tagChipText: {
+  tagText: {
     fontSize: 13,
-    color: bubblegumColors.textMuted,
+    color: DS.muted,
     fontWeight: '600',
   },
-  tagChipTextSelected: {
-    color: bubblegumColors.primaryDark,
+  tagTextSelected: {
+    color: DS.primary,
+  },
+  ctaBtn: {
+    backgroundColor: DS.primary,
+    borderRadius: DS.radius.pill,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: DS.space.sm,
+  },
+  ctaBtnDisabled: {
+    backgroundColor: DS.cardBorder,
+  },
+  ctaText: {
+    ...DS.text_section,
+    fontFamily: DS.font.display,
+    color: DS.white,
+    fontSize: 17,
   },
 })

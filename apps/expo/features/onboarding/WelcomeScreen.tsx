@@ -1,136 +1,156 @@
 'use client'
 
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Button, Text, YStack } from 'tamagui'
+import { Text } from 'tamagui'
 import { useRouter } from 'expo-router'
-import Svg, { Circle, Path } from 'react-native-svg'
-import { bubblegumColors } from '@my/config'
+import { LinearGradient } from 'expo-linear-gradient'
+import { TouchableOpacity } from 'react-native'
+import { DS } from '../../theme'
 
-function PawPrintIcon({ size = 80 }: { size?: number }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 100 100" fill="none">
-      {/* Paw pads */}
-      <Circle cx="50" cy="62" r="22" fill={bubblegumColors.primary} />
-      <Circle cx="28" cy="42" r="11" fill={bubblegumColors.primary} />
-      <Circle cx="50" cy="35" r="11" fill={bubblegumColors.primary} />
-      <Circle cx="72" cy="42" r="11" fill={bubblegumColors.primary} />
-      <Circle cx="35" cy="58" r="10" fill={bubblegumColors.primaryDark} />
-      <Circle cx="50" cy="65" r="10" fill={bubblegumColors.primaryDark} />
-      <Circle cx="65" cy="58" r="10" fill={bubblegumColors.primaryDark} />
-    </Svg>
-  )
-}
+const FEATURES = [
+  { emoji: '🐾', text: 'Meet people through your pet' },
+  { emoji: '💕', text: 'Date, befriend, or just walk together' },
+  { emoji: '📍', text: 'Matches near you, right now' },
+]
 
 export function WelcomeScreen() {
   const router = useRouter()
 
   return (
-    <SafeAreaView style={styles.safe}>
-      <YStack flex={1} backgroundColor={bubblegumColors.background} paddingHorizontal={24}>
-        {/* Top decorative circles */}
-        <YStack
-          position="absolute"
-          top={-60}
-          right={-40}
-          width={200}
-          height={200}
-          borderRadius={100}
-          backgroundColor={bubblegumColors.primaryLight}
-          opacity={0.3}
-        />
-        <YStack
-          position="absolute"
-          top={80}
-          left={-60}
-          width={150}
-          height={150}
-          borderRadius={75}
-          backgroundColor={bubblegumColors.secondary}
-          opacity={0.2}
-        />
+    <LinearGradient
+      colors={DS.gradient}
+      start={{ x: 0.2, y: 0 }}
+      end={{ x: 1, y: 1 }}
+      style={styles.gradient}
+    >
+      <SafeAreaView style={styles.safe}>
+        {/* Watermark paw — large rotated, low opacity */}
+        <Text style={styles.watermark}>🐾</Text>
 
-        <YStack flex={1} alignItems="center" justifyContent="center" gap="$5">
-          <PawPrintIcon size={100} />
-
-          <YStack alignItems="center" gap="$2">
-            <Text
-              fontSize={42}
-              fontWeight="900"
-              color={bubblegumColors.primary}
-              letterSpacing={-1}
-            >
-              PetPals
+        <View style={styles.inner}>
+          {/* Hero */}
+          <View style={styles.heroSection}>
+            <Text style={styles.heroTitle}>PetPals</Text>
+            <Text style={styles.heroSub}>
+              Your pet is the icebreaker.{'\n'}You're here to connect.
             </Text>
-            <Text
-              fontSize={16}
-              color={bubblegumColors.textMuted}
-              textAlign="center"
-              lineHeight={24}
-            >
-              Find the perfect playmate{'\n'}for your furry best friend 🐾
-            </Text>
-          </YStack>
+          </View>
 
-          {/* Feature bubbles */}
-          <YStack gap="$3" width="100%">
-            {[
-              { emoji: '📍', text: 'Matches near you' },
-              { emoji: '🐶', text: 'Dogs, cats & more' },
-              { emoji: '💕', text: 'Playdates made easy' },
-            ].map(({ emoji, text }) => (
-              <YStack
-                key={text}
-                flexDirection="row"
-                alignItems="center"
-                gap="$3"
-                backgroundColor={bubblegumColors.backgroundCard}
-                borderRadius={16}
-                padding="$3"
-                shadowColor={bubblegumColors.primary}
-                shadowOffset={{ width: 0, height: 2 }}
-                shadowOpacity={0.08}
-                shadowRadius={8}
-              >
-                <Text fontSize={24}>{emoji}</Text>
-                <Text fontSize={15} fontWeight="600" color={bubblegumColors.text}>
-                  {text}
-                </Text>
-              </YStack>
+          {/* Glass feature cards */}
+          <View style={styles.features}>
+            {FEATURES.map(({ emoji, text }) => (
+              <View key={text} style={styles.glassCard}>
+                <Text style={styles.featureEmoji}>{emoji}</Text>
+                <Text style={styles.featureText}>{text}</Text>
+              </View>
             ))}
-          </YStack>
-        </YStack>
+          </View>
+        </View>
 
-        {/* CTA */}
-        <YStack paddingBottom={32} gap="$3">
-          <Button
+        {/* CTA pinned to bottom */}
+        <View style={styles.ctaSection}>
+          <TouchableOpacity
+            style={styles.ctaButton}
             onPress={() => router.push('/onboarding/owner')}
-            backgroundColor={bubblegumColors.primary}
-            borderRadius={30}
-            height={56}
-            pressStyle={{ opacity: 0.88, scale: 0.98 }}
+            activeOpacity={0.88}
           >
-            <Text color="white" fontWeight="800" fontSize={18}>
-              Find My Pal 🐾
-            </Text>
-          </Button>
-          <Text
-            fontSize={11}
-            color={bubblegumColors.textLight}
-            textAlign="center"
-          >
-            Free to join · No credit card needed
-          </Text>
-        </YStack>
-      </YStack>
-    </SafeAreaView>
+            <Text style={styles.ctaText}>Find My Match 🐾</Text>
+          </TouchableOpacity>
+          <Text style={styles.ctaSub}>Free to join · No credit card needed</Text>
+        </View>
+      </SafeAreaView>
+    </LinearGradient>
   )
 }
 
 const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   safe: {
     flex: 1,
-    backgroundColor: bubblegumColors.background,
+  },
+  watermark: {
+    position: 'absolute',
+    fontSize: 280,
+    top: -20,
+    right: -60,
+    opacity: 0.07,
+    transform: [{ rotate: '15deg' }],
+    zIndex: 0,
+  },
+  inner: {
+    flex: 1,
+    paddingHorizontal: DS.space.xl,
+    justifyContent: 'center',
+    gap: DS.space.xxl,
+    zIndex: 1,
+  },
+  heroSection: {
+    gap: DS.space.md,
+  },
+  heroTitle: {
+    ...DS.text_hero,
+    fontSize: 52,
+    fontFamily: DS.font.display,
+    color: DS.onGradient,
+    letterSpacing: -1,
+  },
+  heroSub: {
+    ...DS.text_body,
+    fontSize: 17,
+    color: 'rgba(255,255,255,0.88)',
+    lineHeight: 26,
+  },
+  features: {
+    gap: DS.space.md,
+  },
+  glassCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: DS.space.base,
+    backgroundColor: DS.glassBg,
+    borderRadius: DS.radius.card,
+    borderWidth: 1,
+    borderColor: DS.glassBorder,
+    paddingHorizontal: DS.space.base,
+    paddingVertical: DS.space.md,
+  },
+  featureEmoji: {
+    fontSize: 24,
+  },
+  featureText: {
+    ...DS.text_body,
+    fontFamily: DS.font.body,
+    color: DS.onGradient,
+    fontSize: 15,
+    fontWeight: '600',
+    flex: 1,
+  },
+  ctaSection: {
+    paddingHorizontal: DS.space.xl,
+    paddingBottom: DS.space.xxl,
+    gap: DS.space.sm,
+    zIndex: 1,
+  },
+  ctaButton: {
+    backgroundColor: DS.ctaBg,
+    borderRadius: DS.radius.pill,
+    height: 56,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  ctaText: {
+    ...DS.text_section,
+    fontFamily: DS.font.display,
+    color: DS.ctaText,
+    fontSize: 18,
+  },
+  ctaSub: {
+    ...DS.text_micro,
+    color: 'rgba(255,255,255,0.65)',
+    textAlign: 'center',
   },
 })

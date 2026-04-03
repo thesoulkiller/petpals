@@ -1,4 +1,4 @@
-'use client'
+
 
 import React, { useState } from 'react'
 import { StyleSheet, Image, TouchableOpacity, FlatList, View } from 'react-native'

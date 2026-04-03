@@ -1,4 +1,4 @@
-'use client'
+
 
 import React, { useEffect } from 'react'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'

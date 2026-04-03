@@ -1,4 +1,4 @@
-'use client'
+
 
 import React from 'react'
 import { View, StyleSheet, Dimensions, TouchableOpacity, Text } from 'react-native'

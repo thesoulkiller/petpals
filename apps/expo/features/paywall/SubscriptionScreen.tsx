@@ -1,4 +1,4 @@
-'use client'
+
 
 import React from 'react'
 import { StyleSheet, Alert, ScrollView, View, TouchableOpacity } from 'react-native'

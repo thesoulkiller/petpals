@@ -1,4 +1,4 @@
-'use client'
+
 
 import React, { useState } from 'react'
 import { StyleSheet, Alert, View, TouchableOpacity } from 'react-native'

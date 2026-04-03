@@ -28,7 +28,6 @@ function FloatingPaw({
   emoji: string
   delay: number
   startX: number
-  key?: React.Key
 }) {
   const translateY = useRef(new Animated.Value(H + 50)).current
   const opacity = useRef(new Animated.Value(0)).current

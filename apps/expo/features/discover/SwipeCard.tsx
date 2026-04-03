@@ -26,7 +26,6 @@ interface SwipeCardProps {
   onSwipe: (direction: SwipeDirection) => void
   isTop: boolean
   stackIndex: number
-  key?: React.Key
 }
 
 export function SwipeCard({ profile, onSwipe, isTop, stackIndex }: SwipeCardProps) {

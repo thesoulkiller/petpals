@@ -5,7 +5,7 @@
       "name": "Expo Dev Server (iOS Simulator)",
       "runtimeExecutable": "/bin/sh",
       "runtimeArgs": ["/Users/kintaro/projects/aidev/petpals/.claude/start-expo-ios.sh"],
-      "port": 8082
+      "port": 8081
     },
     {
       "name": "Expo Dev Server (Android Emulator)",

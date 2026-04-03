@@ -45,7 +45,6 @@ type AppAction =
   | { type: 'COMPLETE_ONBOARDING'; payload: UserState }
   | { type: 'SET_PROFILES'; payload: PetProfile[] }
   | { type: 'SWIPE'; payload: { profileId: string; direction: SwipeDirection } }
-  | { type: 'USE_SUPERLIKE' }
   | { type: 'CLEAR_MATCH' }
   | { type: 'SET_PREMIUM' }
 
@@ -141,7 +140,6 @@ interface AppContextValue {
   swipe: (profileId: string, direction: SwipeDirection) => void
   updateUser: (patch: Partial<UserState>) => void
   completeOnboarding: (user: UserState) => void
-  useSuperlike: () => boolean
   clearMatch: () => void
   setPremium: () => void
 }
@@ -199,11 +197,6 @@ export function AppProvider({ children, initialProfiles }: AppProviderProps) {
     dispatch({ type: 'COMPLETE_ONBOARDING', payload: user })
   }, [])
 
-  const useSuperlike = useCallback((): boolean => {
-    if (state.user.superlikes <= 0) return false
-    return true
-  }, [state.user.superlikes])
-
   const clearMatch = useCallback(() => {
     dispatch({ type: 'CLEAR_MATCH' })
   }, [])
@@ -227,7 +220,6 @@ export function AppProvider({ children, initialProfiles }: AppProviderProps) {
         swipe,
         updateUser,
         completeOnboarding,
-        useSuperlike,
         clearMatch,
         setPremium,
       }}
